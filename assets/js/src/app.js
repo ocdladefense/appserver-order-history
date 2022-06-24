@@ -1,15 +1,14 @@
 /** @jsx vNode */
 
-import { vNode, addEvent, getMainContainer, changeMainContainer, myAppEventHandler } from '../../../node_modules/@ocdladefense/view/view.js';
+import { vNode, addEvent, getMainContainer, changeMainContainer, myAppEventHandler, render } from '../../../node_modules/@ocdladefense/view/view.js';
 
 import { CACHE, HISTORY } from '../../../node_modules/@ocdladefense/view/cache.js';
 
 
-import { cityFormatter, stateFormatter, createMemberX } from './contactFieldFormat.js';
 
-import { getEvents, getEventDetails, getRegistrants, getCountRegistrants } from './data.js';
+import { getOrderItems, getOrderItemDetails } from './data.js';
 
-import { EventListFull, EventFull } from './components.js';
+import { OrderListFull, OrderFull } from './components.js';
 
 import { switchToList, switchToDetails, doSearch } from './events.js';
 
@@ -17,24 +16,25 @@ import { switchToList, switchToDetails, doSearch } from './events.js';
 
 function init() {
     // Probably change to document.querySelector().
-    changeMainContainer("main");
+    changeMainContainer("order-history-main");
 
-    let theList = getEvents();
+    let theList = getOrderItems();
 
 
     Promise.all([theList]).then(function(data) {
-        CACHE.set("events", data[0]);
+        CACHE.set("OrderItems", data[0]); //not being used? maybe?
         
-        let initTree = <EventListFull events={data[0]} searchBar={""} datesChecked={false} contactsChecked={false} />;
+        let initTree = <OrderListFull orderItems={data[0]} />;
         
         HISTORY.clear();
         HISTORY.set(0, initTree);
+        console.log(getMainContainer());
         render(getMainContainer(), initTree);
     });
 
     document.addEventListener("click", myAppEventHandler);
 }
-
+/*
 addEvent("search", function() {
     let stringEntered = document.getElementById("searchBar").value;
     let orderDatesAcs = document.getElementById("dateCheckBox").checked;
@@ -44,6 +44,6 @@ addEvent("search", function() {
 });
 addEvent("list", switchToList);
 addEvent("details", switchToDetails);
-
+*/
 
 domReady(init);

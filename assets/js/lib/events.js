@@ -2,8 +2,8 @@
 export { switchToList, switchToDetails, doSearch };
 import { vNode } from '../../../node_modules/@ocdladefense/view/view.js';
 import { CACHE, HISTORY } from '../../../node_modules/@ocdladefense/view/cache.js';
-import { EventListFull, EventFull, EventList, EventSearch } from './components.js';
-import { getEvents, getEventDetails, getRegistrants, getCountRegistrants } from './data.js';
+import { OrderListFull, OrderFull, OrderList } from './components.js';
+import { getOrderItems, getOrderItemDetails } from './data.js';
 
 function switchToDetails(id) {
   var event = getEventDetails(id); // let contacts = getRegistrants(id);

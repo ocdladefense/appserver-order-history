@@ -6,7 +6,7 @@
         <i id="switchButtonIcon" data-action="list" class="fas fa-arrow-left"></i>
     </a>
 
-    <div id="main">
+    <div id="order-history-main">
         <div class="example-list" id="example-list">
         </div>
     </div>
