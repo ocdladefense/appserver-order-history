@@ -25,51 +25,56 @@ import { cityFormatter, stateFormatter, createMemberX } from './contactFieldForm
 const OrderListFull = function(props) {
     return(
         <div> 
-            <OrderList orderItems={props.orderItems} />
+            <OrderList orders={props.orders} />
         </div>
     )
 };
 
 const OrderList = function(props) {
-    let orderItems = props.orderItems;
 
-    let list = [];
-    for (let i = 0; i < orderItems.length; i++) {
-        list.push(<OrderListItem orderItem={orderItems[i]} />); //here might be a good place to add them together?
+    let orders = props.orders;
+  
+    let ordersFormatted = [];
+    for (let i = 0; i < orders.length; i++) {
+        ordersFormatted.push(<OrderListItem order={orders[i]} />);
     }
-
+  
     return (
-        <div class="flex-parent record-list" id="record-list-3">
-            {list}
-        </div>
+      <div class="flex-parent contact-list" id="contactList3">
+        <ul class="table-row should-be-invisible table-headers">
+          <li class="table-cell">Id</li>
+          <li class="table-cell">OrderNumber</li>
+          <li class="table-cell">AccountId</li>
+          <li class="table-cell">ActivatedDate</li>
+          <li class="table-cell">EffectiveDate</li>
+          <li class="table-cell">BillToContact</li>
+          <li class="table-cell">ShipToContact</li>
+          <li class="table-cell">TotalAmount</li>
+        </ul>
+        {ordersFormatted}
+      </div>
     )
 };
 
 const OrderListItem = function(props) {
-    
-    // let theCount = parseInt(CACHE.get("eventsContactCount")[props.event.Id] && CACHE.get("eventsContactCount")[props.event.Id].expr0).toString();
-    // theCount = CACHE.get("eventsContactCount")[props.event.Id] ? theCount : "None";
-    let theCount = "5";
 
-    // href={"#" + props.event.Id}
-    let contactName = "NA";
-    let orderNumber = "NA";
-    if (props.orderItem.Contact__r) {
-        contactName = props.orderItem.Contact__r.Name
-    }
-    if (props.orderItem.Order) {
-        orderNumber = props.orderItem.Order.OrderNumber
-    }
-    
+    let order = props.order;
+  
     return (
-        <div class="record-list-item">
-            <h3><a class="record-button record-button-2" data-action="details" href={"#"} data-event-id={orderNumber}>{orderNumber}</a></h3>
-            <p>{props.orderItem.TotalPrice}</p>
-            <p>{props.orderItem.ExpirationDate__c}</p>
-            <p>{contactName}</p>
-        </div>
+      <ul class="table-row">
+        <li class="table-cell order-id">{order.Id}</li>
+        <li class="table-cell order-number">{order.orderNumber}</li>
+        <li class="table-cell account-id"><a href={"https://ocdla.app/directory/members/"+order.AccountId}>{order.Account.Name}</a></li>
+        <li class="table-cell order-activate">{order.ActivatedDate}</li>
+        <li class="table-cell order-effective">{order.EffectiveDate}</li>
+        <li class="table-cell order-ship"><a href={"https://ocdla.app/directory/members/"+order.ShipToContactId}>{order.ShipToContactId}</a></li>
+        <li class="table-cell order-bill"><a href={"https://ocdla.app/directory/members/"+order.BillToContactId}>{order.BillToContact.Name}</a></li>
+        <li class="table-cell order-total">{order.TotalAmount.toString()}</li>
+      </ul>
     )
+
 };
+
 
 
 //When you click on an order, these are used:

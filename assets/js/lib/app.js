@@ -10,10 +10,10 @@ function init() {
   changeMainContainer("order-history-main");
   var theList = getOrderItems();
   Promise.all([theList]).then(function (data) {
-    CACHE.set("OrderItems", data[0]); //not being used? maybe?
+    CACHE.set("Orders", data[0]); //not being used? maybe?
 
     var initTree = vNode(OrderListFull, {
-      orderItems: data[0]
+      orders: data[0]
     });
     HISTORY.clear();
     HISTORY.set(0, initTree);

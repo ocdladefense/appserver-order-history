@@ -12,50 +12,71 @@ import { cityFormatter, stateFormatter, createMemberX } from './contactFieldForm
 
 var OrderListFull = function OrderListFull(props) {
   return vNode("div", null, vNode(OrderList, {
-    orderItems: props.orderItems
+    orders: props.orders
   }));
 };
 
 var OrderList = function OrderList(props) {
-  var orderItems = props.orderItems;
-  var list = [];
+  var orders = props.orders;
+  var ordersFormatted = [];
 
-  for (var i = 0; i < orderItems.length; i++) {
-    list.push(vNode(OrderListItem, {
-      orderItem: orderItems[i]
-    })); //here might be a good place to add them together?
+  for (var i = 0; i < orders.length; i++) {
+    ordersFormatted.push(vNode(OrderListItem, {
+      order: orders[i]
+    }));
   }
 
   return vNode("div", {
-    "class": "flex-parent record-list",
-    id: "record-list-3"
-  }, list);
+    "class": "flex-parent contact-list",
+    id: "contactList3"
+  }, vNode("ul", {
+    "class": "table-row should-be-invisible table-headers"
+  }, vNode("li", {
+    "class": "table-cell"
+  }, "Id"), vNode("li", {
+    "class": "table-cell"
+  }, "OrderNumber"), vNode("li", {
+    "class": "table-cell"
+  }, "AccountId"), vNode("li", {
+    "class": "table-cell"
+  }, "ActivatedDate"), vNode("li", {
+    "class": "table-cell"
+  }, "EffectiveDate"), vNode("li", {
+    "class": "table-cell"
+  }, "BillToContact"), vNode("li", {
+    "class": "table-cell"
+  }, "ShipToContact"), vNode("li", {
+    "class": "table-cell"
+  }, "TotalAmount")), ordersFormatted);
 };
 
 var OrderListItem = function OrderListItem(props) {
-  // let theCount = parseInt(CACHE.get("eventsContactCount")[props.event.Id] && CACHE.get("eventsContactCount")[props.event.Id].expr0).toString();
-  // theCount = CACHE.get("eventsContactCount")[props.event.Id] ? theCount : "None";
-  var theCount = "5"; // href={"#" + props.event.Id}
-
-  var contactName = "NA";
-  var orderNumber = "NA";
-
-  if (props.orderItem.Contact__r) {
-    contactName = props.orderItem.Contact__r.Name;
-  }
-
-  if (props.orderItem.Order) {
-    orderNumber = props.orderItem.Order.OrderNumber;
-  }
-
-  return vNode("div", {
-    "class": "record-list-item"
-  }, vNode("h3", null, vNode("a", {
-    "class": "record-button record-button-2",
-    "data-action": "details",
-    href: "#",
-    "data-event-id": orderNumber
-  }, orderNumber)), vNode("p", null, props.orderItem.TotalPrice), vNode("p", null, props.orderItem.ExpirationDate__c), vNode("p", null, contactName));
+  var order = props.order;
+  return vNode("ul", {
+    "class": "table-row"
+  }, vNode("li", {
+    "class": "table-cell order-id"
+  }, order.Id), vNode("li", {
+    "class": "table-cell order-number"
+  }, order.orderNumber), vNode("li", {
+    "class": "table-cell account-id"
+  }, vNode("a", {
+    href: "https://ocdla.app/directory/members/" + order.AccountId
+  }, order.Account.Name)), vNode("li", {
+    "class": "table-cell order-activate"
+  }, order.ActivatedDate), vNode("li", {
+    "class": "table-cell order-effective"
+  }, order.EffectiveDate), vNode("li", {
+    "class": "table-cell order-ship"
+  }, vNode("a", {
+    href: "https://ocdla.app/directory/members/" + order.ShipToContactId
+  }, order.ShipToContactId)), vNode("li", {
+    "class": "table-cell order-bill"
+  }, vNode("a", {
+    href: "https://ocdla.app/directory/members/" + order.BillToContactId
+  }, order.BillToContact.Name)), vNode("li", {
+    "class": "table-cell order-total"
+  }, order.TotalAmount.toString()));
 }; //When you click on an order, these are used:
 //need to seperate these based on the id they were clicked on
 

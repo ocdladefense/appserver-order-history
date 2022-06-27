@@ -29,7 +29,7 @@ class ExampleModule extends Module {
     public function getJsonList() {
 		$api = $this->loadForceApi();
 
-		$results = $api->query("SELECT OrderItem.Contact__c, OrderItem.Product2Id, Contact__r.AccountId, Contact__r.Name, OrderItem.OrderId, OrderItem.ExpirationDate__c, OrderItem.UnitPrice, OrderItem.Quantity, OrderItem.TotalPrice, Order.DateOrderConfirmed__c, Order.OrderNumber FROM OrderItem LIMIT 100");
+		$results = $api->query("SELECT Id, orderNumber, EffectiveDate, ActivatedDate, AccountId, BillToContactId, ShipToContactId, BillToContact.Name, Account.Name, TotalAmount FROM ORDER WHERE BillToContactId = '003j000000rU8YAAA0' LIMIT 100");
 
 		$records = $results->getRecords();
 	

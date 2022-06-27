@@ -22,9 +22,9 @@ function init() {
 
 
     Promise.all([theList]).then(function(data) {
-        CACHE.set("OrderItems", data[0]); //not being used? maybe?
+        CACHE.set("Orders", data[0]); //not being used? maybe?
         
-        let initTree = <OrderListFull orderItems={data[0]} />;
+        let initTree = <OrderListFull orders={data[0]} />;
         
         HISTORY.clear();
         HISTORY.set(0, initTree);
