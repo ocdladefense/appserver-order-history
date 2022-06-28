@@ -3,12 +3,12 @@
 
 
 
-class ExampleModule extends Module {
+class OrderHistoryModule extends Module {
 
     public function __construct(){
         parent::__construct();
 
-        $this->name = "example";
+        $this->name = "orderHistory";
     }
 
 
@@ -49,6 +49,19 @@ class ExampleModule extends Module {
 	
 		return $records[0];
 	}
+
+
+
+	public function getOrderDetails($id){
+		$api = $this->loadForceApi();
+
+		$results = $api->query("SELECT OrderItem.OcdlaProductName__c, OrderItem.Quantity, OrderItem.UnitPrice From OrderItem Where OrderItem.OrderId = '$id'");
+
+		$records = $results->getRecords();
+
+		return $records;
+	}
+
 
 
 }

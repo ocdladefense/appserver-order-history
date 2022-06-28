@@ -33,8 +33,6 @@ var OrderList = function OrderList(props) {
     "class": "table-row should-be-invisible table-headers"
   }, vNode("li", {
     "class": "table-cell"
-  }, "Id"), vNode("li", {
-    "class": "table-cell"
   }, "OrderNumber"), vNode("li", {
     "class": "table-cell"
   }, "AccountId"), vNode("li", {
@@ -55,13 +53,13 @@ var OrderListItem = function OrderListItem(props) {
   return vNode("ul", {
     "class": "table-row"
   }, vNode("li", {
-    "class": "table-cell order-id"
-  }, order.Id), vNode("li", {
     "class": "table-cell order-number"
-  }, order.orderNumber), vNode("li", {
+  }, vNode("a", {
+    href: "/orderhistory/details/" + order.Id
+  }, order.OrderNumber)), vNode("li", {
     "class": "table-cell account-id"
   }, vNode("a", {
-    href: "https://ocdla.app/directory/members/" + order.AccountId
+    href: "/directory/members/" + order.AccountId
   }, order.Account.Name)), vNode("li", {
     "class": "table-cell order-activate"
   }, order.ActivatedDate), vNode("li", {
@@ -69,14 +67,14 @@ var OrderListItem = function OrderListItem(props) {
   }, order.EffectiveDate), vNode("li", {
     "class": "table-cell order-ship"
   }, vNode("a", {
-    href: "https://ocdla.app/directory/members/" + order.ShipToContactId
+    href: "/directory/members/" + order.ShipToContactId
   }, order.ShipToContactId)), vNode("li", {
     "class": "table-cell order-bill"
   }, vNode("a", {
-    href: "https://ocdla.app/directory/members/" + order.BillToContactId
+    href: "/directory/members/" + order.BillToContactId
   }, order.BillToContact.Name)), vNode("li", {
     "class": "table-cell order-total"
-  }, order.TotalAmount.toString()));
+  }, order.TotalAmount));
 }; //When you click on an order, these are used:
 //need to seperate these based on the id they were clicked on
 

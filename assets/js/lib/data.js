@@ -1,7 +1,7 @@
 export { getOrderItems, getOrderItemDetails };
 
 function getOrderItems() {
-  return fetch("/example/list/json").then(function (resp) {
+  return fetch("/orderhistory/list/json").then(function (resp) {
     return resp.json();
   }).then(function (data) {
     return data;
@@ -9,9 +9,9 @@ function getOrderItems() {
 }
 
 function getOrderItemDetails(queryId) {
-  return fetch("/example/details/" + queryId).then(function (resp) {
-    return resp.json();
-  }).then(function (data) {
-    return data;
-  });
+  /*
+  return fetch("/example/details/" + queryId)
+  .then(resp => resp.json())
+  .then(data => {return data;});*/
+  return false;
 }

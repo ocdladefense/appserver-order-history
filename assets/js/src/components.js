@@ -42,7 +42,6 @@ const OrderList = function(props) {
     return (
       <div class="flex-parent contact-list" id="contactList3">
         <ul class="table-row should-be-invisible table-headers">
-          <li class="table-cell">Id</li>
           <li class="table-cell">OrderNumber</li>
           <li class="table-cell">AccountId</li>
           <li class="table-cell">ActivatedDate</li>
@@ -62,14 +61,13 @@ const OrderListItem = function(props) {
   
     return (
       <ul class="table-row">
-        <li class="table-cell order-id">{order.Id}</li>
-        <li class="table-cell order-number">{order.orderNumber}</li>
-        <li class="table-cell account-id"><a href={"https://ocdla.app/directory/members/"+order.AccountId}>{order.Account.Name}</a></li>
+        <li class="table-cell order-number"><a href={"/orderhistory/details/"+order.Id}>{order.OrderNumber}</a></li>
+        <li class="table-cell account-id"><a href={"/directory/members/"+order.AccountId}>{order.Account.Name}</a></li>
         <li class="table-cell order-activate">{order.ActivatedDate}</li>
         <li class="table-cell order-effective">{order.EffectiveDate}</li>
-        <li class="table-cell order-ship"><a href={"https://ocdla.app/directory/members/"+order.ShipToContactId}>{order.ShipToContactId}</a></li>
-        <li class="table-cell order-bill"><a href={"https://ocdla.app/directory/members/"+order.BillToContactId}>{order.BillToContact.Name}</a></li>
-        <li class="table-cell order-total">{order.TotalAmount.toString()}</li>
+        <li class="table-cell order-ship"><a href={"/directory/members/"+order.ShipToContactId}>{order.ShipToContactId}</a></li>
+        <li class="table-cell order-bill"><a href={"/directory/members/"+order.BillToContactId}>{order.BillToContact.Name}</a></li>
+        <li class="table-cell order-total">{order.TotalAmount}</li>
       </ul>
     )
 

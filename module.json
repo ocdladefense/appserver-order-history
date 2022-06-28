@@ -1,23 +1,24 @@
 
 {
 	"comment": "Module definition file.",
-	"name": "example",
+	"name": "OrderHistory",
    "connectedApp": "default",
-	"description": "An example module.",
+	"description": "A order history module.",
     "files": ["Example.php"],
 	"routes": {
-      "example/list":{
+      "orderhistory/list":{
          "callback":"theCallback",
          "content-type":"text/html"
       },
-      "example/list/json":{
+      "orderhistory/list/json":{
         "callback":"getJsonList",
         "content-type":"application/json"
      },
-      "example/details/%id":{
-         "callback":"getJsonDetails",
-        "content-type":"application/json"
+      "orderhistory/details/%id":{
+         "callback":"getOrderDetails",
+         "content-type":"application/json"
       }
+
 
     }
 }
