@@ -1,8 +1,8 @@
 {
-  "name": "@ocdladefense/example-project",
+  "name": "@ocdladefense/order-history",
   "version": "1.0.0",
   "scripts": {
-    "build": "babel assets/js/src -d assets/js/lib"
+    "build": "babel assets/js/src -d assets/js/dist"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
