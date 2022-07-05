@@ -28,6 +28,9 @@ class OrderHistoryModule extends Module {
 
     public function getJsonList() {
 		$api = $this->loadForceApi();
+		//var_dump(current_user());
+		//exit;
+		$currentUserId = '003j000000rU9NvAAK';
 
 		$results = $api->query("SELECT Id, orderNumber, EffectiveDate, ActivatedDate, AccountId, BillToContactId, ShipToContactId, ShipToContact.Name, BillToContact.Name, Account.Name, TotalAmount FROM ORDER WHERE BillToContactId = '003j000000rU9NvAAK' LIMIT 100");
 
