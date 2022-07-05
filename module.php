@@ -52,7 +52,7 @@ class OrderHistoryModule extends Module {
 
 
 
-	public function getOrderDetails($id){
+	public function getOrderDetailsJson($id){
 		$api = $this->loadForceApi();
 
 		$results = $api->query("SELECT OrderItem.OcdlaProductName__c, OrderItem.Quantity, OrderItem.UnitPrice From OrderItem Where OrderItem.OrderId = '$id'");
@@ -60,6 +60,18 @@ class OrderHistoryModule extends Module {
 		$records = $results->getRecords();
 
 		return $records;
+	}
+
+	public function getDetailsList($id){
+
+		$orderId = $id;
+
+		$tpl = new Template("detailed");
+		$tpl->addPath(__DIR__ . "/templates");
+
+		$html = $tpl;
+
+		return $tpl;
 	}
 
 

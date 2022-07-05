@@ -73,6 +73,12 @@ const OrderListItem = function(props) {
 
 };
 
+const DetailedListFull = function(props){
+    let detail = props.orderItems;
+
+    
+}
+
 
 
 //When you click on an order, these are used:

@@ -14,9 +14,13 @@
         "callback":"getJsonList",
         "content-type":"application/json"
      },
-      "orderhistory/details/%id":{
-         "callback":"getOrderDetails",
+      "orderhistory/details/json/%id":{
+         "callback":"getOrderDetailsJson",
          "content-type":"application/json"
+      },
+      "orderhistory/details/%id":{
+         "callback":"getDetailsList",
+         "content-type":"text/html"
       }
 
 

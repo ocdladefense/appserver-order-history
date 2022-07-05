@@ -9,9 +9,7 @@ function getOrderItems() {
 }
 
 function getOrderItemDetails(queryId) {
-  /*
-  return fetch("/example/details/" + queryId)
+  return fetch("/orderhistory/details/json/" + queryId)
   .then(resp => resp.json())
-  .then(data => {return data;});*/
-  return false;
+  .then(data => {return data;});
 }
