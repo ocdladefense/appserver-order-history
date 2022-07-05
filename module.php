@@ -29,7 +29,7 @@ class OrderHistoryModule extends Module {
     public function getJsonList() {
 		$api = $this->loadForceApi();
 
-		$results = $api->query("SELECT Id, orderNumber, EffectiveDate, ActivatedDate, AccountId, BillToContactId, ShipToContactId, BillToContact.Name, Account.Name, TotalAmount FROM ORDER WHERE BillToContactId = '003j000000rU8YAAA0' LIMIT 100");
+		$results = $api->query("SELECT Id, orderNumber, EffectiveDate, ActivatedDate, AccountId, BillToContactId, ShipToContactId, ShipToContact.Name, BillToContact.Name, Account.Name, TotalAmount FROM ORDER WHERE BillToContactId = '003j000000rU9NvAAK' LIMIT 100");
 
 		$records = $results->getRecords();
 	

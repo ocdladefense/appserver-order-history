@@ -33,48 +33,67 @@ var OrderList = function OrderList(props) {
     "class": "table-row should-be-invisible table-headers"
   }, vNode("li", {
     "class": "table-cell"
-  }, "OrderNumber"), vNode("li", {
+  }, "Order Number"), vNode("li", {
     "class": "table-cell"
-  }, "AccountId"), vNode("li", {
+  }, "Account"), vNode("li", {
     "class": "table-cell"
-  }, "ActivatedDate"), vNode("li", {
+  }, "Activated Date"), vNode("li", {
     "class": "table-cell"
-  }, "EffectiveDate"), vNode("li", {
+  }, "Effective Date"), vNode("li", {
     "class": "table-cell"
-  }, "BillToContact"), vNode("li", {
+  }, "Ship To Contact"), vNode("li", {
     "class": "table-cell"
-  }, "ShipToContact"), vNode("li", {
+  }, "Bill To Contact"), vNode("li", {
     "class": "table-cell"
-  }, "TotalAmount")), ordersFormatted);
+  }, "Total Amount")), ordersFormatted);
 };
 
 var OrderListItem = function OrderListItem(props) {
   var order = props.order;
+  var activeDate = "";
+
+  if (order.ActivatedDate) {
+    activeDate = order.ActivatedDate.split('T')[0];
+  }
+
+  var accountName = "";
+
+  if (order.Account) {
+    accountName = order.Account.Name;
+  }
+
+  var shippingName = "";
+
+  if (order.ShipToContact) {
+    shippingName = order.ShipToContact.Name;
+  }
+
   return vNode("ul", {
     "class": "table-row"
   }, vNode("li", {
     "class": "table-cell order-number"
   }, vNode("a", {
+    target: "_blank",
     href: "/orderhistory/details/" + order.Id
   }, order.OrderNumber)), vNode("li", {
     "class": "table-cell account-id"
-  }, vNode("a", {
-    href: "/directory/members/" + order.AccountId
-  }, order.Account.Name)), vNode("li", {
+  }, accountName), vNode("li", {
     "class": "table-cell order-activate"
-  }, order.ActivatedDate), vNode("li", {
+  }, activeDate), vNode("li", {
     "class": "table-cell order-effective"
   }, order.EffectiveDate), vNode("li", {
     "class": "table-cell order-ship"
   }, vNode("a", {
+    target: "_blank",
     href: "/directory/members/" + order.ShipToContactId
-  }, order.ShipToContactId)), vNode("li", {
+  }, shippingName)), vNode("li", {
     "class": "table-cell order-bill"
   }, vNode("a", {
+    target: "_blank",
     href: "/directory/members/" + order.BillToContactId
   }, order.BillToContact.Name)), vNode("li", {
     "class": "table-cell order-total"
-  }, order.TotalAmount));
+  }, "$" + order.TotalAmount));
 }; //When you click on an order, these are used:
 //need to seperate these based on the id they were clicked on
 

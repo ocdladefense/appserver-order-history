@@ -42,13 +42,13 @@ const OrderList = function(props) {
     return (
       <div class="flex-parent contact-list" id="contactList3">
         <ul class="table-row should-be-invisible table-headers">
-          <li class="table-cell">OrderNumber</li>
-          <li class="table-cell">AccountId</li>
-          <li class="table-cell">ActivatedDate</li>
-          <li class="table-cell">EffectiveDate</li>
-          <li class="table-cell">BillToContact</li>
-          <li class="table-cell">ShipToContact</li>
-          <li class="table-cell">TotalAmount</li>
+          <li class="table-cell">Order Number</li>
+          <li class="table-cell">Account</li>
+          <li class="table-cell">Activated Date</li>
+          <li class="table-cell">Effective Date</li>
+          <li class="table-cell">Ship To Contact</li>
+          <li class="table-cell">Bill To Contact</li>
+          <li class="table-cell">Total Amount</li>
         </ul>
         {ordersFormatted}
       </div>
@@ -58,16 +58,29 @@ const OrderList = function(props) {
 const OrderListItem = function(props) {
 
     let order = props.order;
+    let activeDate = "";
+    if (order.ActivatedDate) {
+        activeDate = order.ActivatedDate.split('T')[0];
+    }
+    let accountName = "";
+    if (order.Account) {
+        accountName = order.Account.Name;
+    }
+    let shippingName = "";
+    if (order.ShipToContact) {
+        shippingName = order.ShipToContact.Name;
+    }
+
   
     return (
       <ul class="table-row">
-        <li class="table-cell order-number"><a href={"/orderhistory/details/"+order.Id}>{order.OrderNumber}</a></li>
-        <li class="table-cell account-id"><a href={"/directory/members/"+order.AccountId}>{order.Account.Name}</a></li>
-        <li class="table-cell order-activate">{order.ActivatedDate}</li>
+        <li class="table-cell order-number"><a target="_blank" href={"/orderhistory/details/"+order.Id}>{order.OrderNumber}</a></li>
+        <li class="table-cell account-id">{accountName}</li>
+        <li class="table-cell order-activate">{activeDate}</li>
         <li class="table-cell order-effective">{order.EffectiveDate}</li>
-        <li class="table-cell order-ship"><a href={"/directory/members/"+order.ShipToContactId}>{order.ShipToContactId}</a></li>
-        <li class="table-cell order-bill"><a href={"/directory/members/"+order.BillToContactId}>{order.BillToContact.Name}</a></li>
-        <li class="table-cell order-total">{order.TotalAmount}</li>
+        <li class="table-cell order-ship"><a target="_blank" href={"/directory/members/"+order.ShipToContactId}>{shippingName}</a></li>
+        <li class="table-cell order-bill"><a target="_blank" href={"/directory/members/"+order.BillToContactId}>{order.BillToContact.Name}</a></li>
+        <li class="table-cell order-total">{"$"+order.TotalAmount}</li>
       </ul>
     )
 
