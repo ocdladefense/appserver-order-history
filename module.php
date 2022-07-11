@@ -28,6 +28,9 @@ class OrderHistoryModule extends Module {
 
     public function getJsonList() {
 		$api = $this->loadForceApi();
+		//var_dump(current_user());
+		//exit;
+		$currentUserId = '003j000000rU9NvAAK';
 
 
 		$user = current_user();
