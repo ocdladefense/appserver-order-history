@@ -17,4 +17,4 @@
 
 
 
-<script type="module" src="<?php print module_path(); ?>/assets/js/lib/app.js"></script>
+<script type="module" src="<?php print module_path(); ?>/assets/js/dist/app.js"></script>

@@ -28,14 +28,13 @@ class OrderHistoryModule extends Module {
 
     public function getJsonList() {
 		$api = $this->loadForceApi();
-		//var_dump(current_user());
-		//exit;
+		
 		$currentUserId = '003j000000rU9NvAAK';
 
 
 		$user = current_user();
 
-		$contactId = $user->getContactId();
+		$contactId = $currentUserId;//$user->getContactId();
 		// 003j000000rU9NvAAK
 
 		$query = "SELECT Id, orderNumber, EffectiveDate, ActivatedDate, AccountId, BillToContactId, ShipToContactId, ShipToContact.Name, BillToContact.Name, Account.Name, TotalAmount FROM ORDER WHERE BillToContactId = '%s' LIMIT 100";
@@ -63,27 +62,39 @@ class OrderHistoryModule extends Module {
 	}
 
 
+	public function getOrderItems($Id) {
+		$api = $this->loadForceApi();//here for example, remove later on
+
+		$results = $api->query("SELECT Id, Product2Id, Note_1__c, Note_2__c, Note_3__c, FirstName__c, LastName__c, ExpirationDate__c, Product2.Name, UnitPrice, Quantity, TotalPrice FROM OrderItem WHERE OrderId = '$Id' Order By ExpirationDate__c DESC");
+
+		$records = $results->getRecords();
+	
+		return $records;
+	}
 
 	public function getOrderDetailsJson($id){
+
+		return "dlfskdlf";
+		/*
 		$api = $this->loadForceApi();
 
-		$results = $api->query("SELECT OrderItem.OcdlaProductName__c, OrderItem.Quantity, OrderItem.UnitPrice From OrderItem Where OrderItem.OrderId = '$id'");
+		$results = $api->query("Select Id From Order Where Id = '$id'");
 
 		$records = $results->getRecords();
 
-		return $records;
+		return $records;*/
 	}
 
 	public function getDetailsList($id){
 
-		$orderId = $id;
-
 		$tpl = new Template("detailed");
 		$tpl->addPath(__DIR__ . "/templates");
 
-		$html = $tpl;
+		$widgetHTML = $tpl->render(array(
+			"orderId"     => $id
+		  ));
 
-		return $tpl;
+		return $widgetHTML;
 	}
 
 

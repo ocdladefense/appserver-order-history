@@ -9,7 +9,7 @@ This is our list of components to be used in the app.
 
 
 
-export { OrderListFull, OrderFull, OrderList };
+export { OrderListFull, OrderFull, OrderList, DetailedListFull };
 
 
 import { vNode } from '../../../node_modules/@ocdladefense/view/view.js';
@@ -70,6 +70,10 @@ const OrderListItem = function(props) {
     if (order.ShipToContact) {
         shippingName = order.ShipToContact.Name;
     }
+    let billingName = "";
+    if (order.BillToContact) {
+        billingName = order.BillToContact.Name;
+    }
 
   
     return (
@@ -79,23 +83,27 @@ const OrderListItem = function(props) {
         <li class="table-cell order-activate">{activeDate}</li>
         <li class="table-cell order-effective">{order.EffectiveDate}</li>
         <li class="table-cell order-ship"><a target="_blank" href={"/directory/members/"+order.ShipToContactId}>{shippingName}</a></li>
-        <li class="table-cell order-bill"><a target="_blank" href={"/directory/members/"+order.BillToContactId}>{order.BillToContact.Name}</a></li>
+        <li class="table-cell order-bill"><a target="_blank" href={"/directory/members/"+order.BillToContactId}>{billingName}</a></li>
         <li class="table-cell order-total">{"$"+order.TotalAmount}</li>
       </ul>
     )
 
 };
 
-const DetailedListFull = function(props){
-    let detail = props.orderItems;
-
-    
-}
-
 
 
 //When you click on an order, these are used:
 //need to seperate these based on the id they were clicked on
+
+const DetailedListFull = function(props){
+    //let detail = props.orderItems;
+    console.log(props.orderItems);
+    return(
+        <div>
+            <p>heloo there</p>
+        </div>
+    )
+}
 
 const OrderFull = function(props) {
     

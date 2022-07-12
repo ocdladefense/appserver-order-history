@@ -18,21 +18,20 @@ function init() {
     // Probably change to document.querySelector().
     changeMainContainer("order-history-main");
 
-    let theList = getOrderItems(orderId);
-
+    let theList = getOrderItemDetails(orderId);
 
     Promise.all([theList]).then(function(data) {
-        CACHE.set("OrderItems", data[0]); //not being used? maybe?
+        CACHE.set("OrderItems", data[0]); 
+        
         
         let initTree = <DetailedListFull orderItems={data[0]} />;
         
         HISTORY.clear();
         HISTORY.set(0, initTree);
-        console.log(getMainContainer());
         render(getMainContainer(), initTree);
     });
 
-    document.addEventListener("click", myAppEventHandler);
+    //document.addEventListener("click", myAppEventHandler);
 }
 /*
 addEvent("search", function() {
