@@ -34,10 +34,10 @@ class OrderHistoryModule extends Module {
 
 		$user = current_user();
 
-		$contactId = $currentUserId;//$user->getContactId();
+		$contactId = $user->getContactId();
 		// 003j000000rU9NvAAK
 
-		$query = "SELECT Id, orderNumber, EffectiveDate, ActivatedDate, AccountId, BillToContactId, ShipToContactId, ShipToContact.Name, BillToContact.Name, Account.Name, TotalAmount FROM ORDER WHERE BillToContactId = '%s' LIMIT 100";
+		$query = "SELECT Id, orderNumber, EffectiveDate, ActivatedDate, AccountId, BillToContactId, ShipToContactId, ShipToContact.Name, BillToContact.Name, Account.Name, TotalAmount FROM ORDER WHERE BillToContactId = '%s' ORDER BY EffectiveDate DESC LIMIT 100";
 		$query = sprintf($query, $contactId);
 
 		$results = $api->query($query);
@@ -50,40 +50,19 @@ class OrderHistoryModule extends Module {
 
 
 
-	public function getJsonDetails($id) {
-		//This isnt getting used with the above query, but above query uses extra js work rather than another call to db
+	public function getOrderDetailsJson($id){
+
+		
 		$api = $this->loadForceApi();
 
-		$results = $api->query("SELECT Name, Id, Start_date__c FROM Event__c WHERE Id = '$id'");
+		$results = $api->query("SELECT OrderItem.Contact__c, OrderItem.Product2Id, OrderItem.Product2.ClickpdxCatalog__IsOption__c, OrderItem.Product2.ClickpdxCatalog__ParentProduct__c, OrderItem.Product2.Name, Contact__r.AccountId, Contact__r.Account.Name, Contact__r.Name, OrderItem.FirstName__c, OrderItem.LastName__c, OrderItem.ExpirationDate__c, OrderItem.OrderId, OrderItem.UnitPrice, OrderItem.Quantity, OrderItem.TotalPrice, Order.EffectiveDate, Order.ActivatedDate, Order.Account.Name, Order.BillToContact.Name, Order.ShipToContact.Name, Order.TotalAmount, Order.OrderNumber FROM OrderItem WHERE OrderId = '$id' ORDER BY ExpirationDate__c DESC");
 
 		$records = $results->getRecords();
-	
-		return $records[0];
-	}
 
-
-	public function getOrderItems($Id) {
-		$api = $this->loadForceApi();//here for example, remove later on
-
-		$results = $api->query("SELECT Id, Product2Id, Note_1__c, Note_2__c, Note_3__c, FirstName__c, LastName__c, ExpirationDate__c, Product2.Name, UnitPrice, Quantity, TotalPrice FROM OrderItem WHERE OrderId = '$Id' Order By ExpirationDate__c DESC");
-
-		$records = $results->getRecords();
-	
 		return $records;
 	}
 
-	public function getOrderDetailsJson($id){
 
-		return "dlfskdlf";
-		/*
-		$api = $this->loadForceApi();
-
-		$results = $api->query("Select Id From Order Where Id = '$id'");
-
-		$records = $results->getRecords();
-
-		return $records;*/
-	}
 
 	public function getDetailsList($id){
 

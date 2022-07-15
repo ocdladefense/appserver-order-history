@@ -8,7 +8,7 @@ import { CACHE, HISTORY } from '../../../node_modules/@ocdladefense/view/cache.j
 
 import { getOrderItems, getOrderItemDetails } from './data.js';
 
-import { OrderListFull, OrderFull, DetailedListFull  } from './components.js';
+import { OrderListFull, DetailedListFull  } from './components.js';
 
 import { switchToList, switchToDetails, doSearch } from './events.js';
 

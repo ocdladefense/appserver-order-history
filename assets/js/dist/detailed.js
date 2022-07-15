@@ -2,7 +2,7 @@
 import { vNode, addEvent, getMainContainer, changeMainContainer, myAppEventHandler, render } from '../../../node_modules/@ocdladefense/view/view.js';
 import { CACHE, HISTORY } from '../../../node_modules/@ocdladefense/view/cache.js';
 import { getOrderItems, getOrderItemDetails } from './data.js';
-import { OrderListFull, OrderFull, DetailedListFull } from './components.js';
+import { OrderListFull, DetailedListFull } from './components.js';
 import { switchToList, switchToDetails, doSearch } from './events.js';
 
 function init() {

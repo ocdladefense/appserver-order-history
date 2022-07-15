@@ -7,7 +7,7 @@ import { vNode } from '../../../node_modules/@ocdladefense/view/view.js';
 import { CACHE, HISTORY } from '../../../node_modules/@ocdladefense/view/cache.js';
 
 
-import { OrderListFull, OrderFull, OrderList }  from './components.js';
+import { OrderListFull, OrderList }  from './components.js';
 import { getOrderItems, getOrderItemDetails } from './data.js';
 
 
