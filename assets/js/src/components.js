@@ -23,8 +23,22 @@ import { cityFormatter, stateFormatter, createMemberX } from './contactFieldForm
 //for the list of orders these are used
 
 const OrderListFull = function(props) {
+
+    if (props.orders.length <= 0) {
+        return(<div><h2>No Orders Found for this Account</h2></div>);
+    }
+
+    let orders = props.orders[0];
+    let billingName = "";
+    if (orders.BillToContact) {
+        billingName = orders.BillToContact.Name;
+    }
+    
     return(
-        <div> 
+        <div>
+            <div>
+                <h2>Order History for {billingName}</h2>
+            </div>
             <OrderList orders={props.orders} />
         </div>
     )
@@ -58,33 +72,33 @@ const OrderList = function(props) {
 const OrderListItem = function(props) {
 
     let order = props.order;
-    let activeDate = "";
+    let activeDate = "NA";
     if (order.ActivatedDate) {
         activeDate = order.ActivatedDate.split('T')[0];
     }
-    let accountName = "";
+    let accountName = "NA";
     if (order.Account) {
         accountName = order.Account.Name;
     }
-    let shippingName = "";
+    let shippingName = "NA";
     if (order.ShipToContact) {
         shippingName = order.ShipToContact.Name;
     }
-    let billingName = "";
+    let billingName = "NA";
     if (order.BillToContact) {
         billingName = order.BillToContact.Name;
     }
 
-  
+    //TODO: Links are clickable even if they are NA
     return (
       <ul class="table-row">
-        <li class="table-cell order-number"><a target="_blank" href={"/orderhistory/details/"+order.Id}>{order.OrderNumber}</a></li>
-        <li class="table-cell account-id">{accountName}</li>
-        <li class="table-cell order-activate">{activeDate}</li>
-        <li class="table-cell order-effective">{order.EffectiveDate}</li>
-        <li class="table-cell order-ship"><a target="_blank" href={"/directory/members/"+order.ShipToContactId}>{shippingName}</a></li>
-        <li class="table-cell order-bill"><a target="_blank" href={"/directory/members/"+order.BillToContactId}>{billingName}</a></li>
-        <li class="table-cell order-total">{"$"+order.TotalAmount}</li>
+        <li class="table-cell order-number"><span className="disappear-when-big">Order Number: </span><a target="_blank" href={"/orderhistory/details/"+order.Id}>{order.OrderNumber}</a></li>
+        <li class="table-cell account-id"><span className="disappear-when-big">Account: </span>{accountName}</li>
+        <li class="table-cell order-activate"><span className="disappear-when-big">Activated Date: </span>{activeDate}</li>
+        <li class="table-cell order-effective"><span className="disappear-when-big">Effective Date: </span>{order.EffectiveDate}</li>
+        <li class="table-cell order-ship"><span className="disappear-when-big">Ship To Contact: </span><a target="_blank" href={"/directory/members/"+order.ShipToContactId}>{shippingName}</a></li>
+        <li class="table-cell order-bill"><span className="disappear-when-big">Bill To Contact: </span><a target="_blank" href={"/directory/members/"+order.BillToContactId}>{billingName}</a></li>
+        <li class="table-cell order-total"><span className="disappear-when-big">Total Amount: </span>{"$"+order.TotalAmount}</li>
       </ul>
     )
 
@@ -101,19 +115,19 @@ const DetailedListFull = function(props){
     //let detail = props.orderItems;
     let order = props.orderItems[0];
 
-    let activeDate = "";
+    let activeDate = "NA";
     if (order.Order.ActivatedDate) {
         activeDate = order.Order.ActivatedDate.split('T')[0];
     }
-    let accountName = "";
+    let accountName = "NA";
     if (order.Order.Account) {
         accountName = order.Order.Account.Name;
     }
-    let shippingName = "";
+    let shippingName = "NA";
     if (order.Order.ShipToContact) {
         shippingName = order.Order.ShipToContact.Name;
     }
-    let billingName = "";
+    let billingName = "NA";
     if (order.Order.BillToContact) {
         billingName = order.Order.BillToContact.Name;
     }
@@ -122,7 +136,7 @@ const DetailedListFull = function(props){
         <div>
             <div>
                 <h1 class="margin-maker-2">
-                    {order.Order.OrderNumber}
+                    Order {order.Order.OrderNumber}
                 </h1>
                 <h2 class="margin-maker">
                     {accountName}
@@ -169,7 +183,7 @@ const OrderItemListItem = function(props) {
 
     let orderItem = props.orderItem;
 
-    let productName = " ";
+    let productName = "NA";
     let productLinkId = "";
     if (orderItem.Product2) {
         productName = orderItem.Product2.Name;
@@ -180,17 +194,17 @@ const OrderItemListItem = function(props) {
             productLinkId = orderItem.Product2Id;
         }
     }
-    let accountName = " ";
+    let accountName = "NA";
     if (orderItem.Contact__r) {
         if (orderItem.Contact__r.Account) {
             accountName = orderItem.Contact__r.Account.Name;
         }
     }
-    let fullName = " ";
+    let fullName = "NA";
     if (orderItem.FirstName__c && orderItem.LastName__c) {
         fullName = orderItem.FirstName__c + " " + orderItem.LastName__c;
     }
-    let totalPrice = "";
+    let totalPrice = "NA";
     if (orderItem.TotalPrice) {
         totalPrice = orderItem.TotalPrice;
     }
@@ -202,13 +216,13 @@ const OrderItemListItem = function(props) {
     //will need something to check if product doesnt exist dont put it as link
     return (
       <ul class="table-row">
-        <li class="table-cell order-bill"><a target="_blank" href={"https://ocdpartial-ocdla.cs198.force.com/OcdlaProduct?id="+productLinkId}>{productName}</a></li>
-        <li class="table-cell account-id">{accountName}</li>
-        <li class="table-cell account-id">{fullName}</li>
-        <li class="table-cell account-id">{orderItem.ExpirationDate__c}</li>
-        <li class="table-cell order-total">{"$"+orderItem.UnitPrice}</li>
-        <li class="table-cell account-id">{orderItem.Quantity}</li>
-        <li class="table-cell order-total">{"$"+totalPrice}</li>
+        <li class="table-cell order-bill"><span className="disappear-when-big">Product: </span><a target="_blank" href={"https://ocdpartial-ocdla.cs198.force.com/OcdlaProduct?id="+productLinkId}>{productName}</a></li>
+        <li class="table-cell account-id"><span className="disappear-when-big">Account: </span>{accountName}</li>
+        <li class="table-cell account-id"><span className="disappear-when-big">Name: </span>{fullName}</li>
+        <li class="table-cell account-id"><span className="disappear-when-big">Expiration Date: </span>{orderItem.ExpirationDate__c}</li>
+        <li class="table-cell order-total"><span className="disappear-when-big">Unit Price: </span>{"$"+orderItem.UnitPrice}</li>
+        <li class="table-cell account-id"><span className="disappear-when-big">Quantity: </span>{orderItem.Quantity}</li>
+        <li class="table-cell order-total"><span className="disappear-when-big">Total Amount: </span>{"$"+totalPrice}</li>
       </ul>
     )
 
