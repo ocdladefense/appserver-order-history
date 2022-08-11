@@ -8,7 +8,8 @@ This is our list of components to be used in the app.
 export { OrderListFull, OrderList, DetailedListFull };
 import { vNode } from '../../../node_modules/@ocdladefense/view/view.js';
 import { CACHE, HISTORY } from '../../../node_modules/@ocdladefense/view/cache.js';
-import { cityFormatter, stateFormatter, createMemberX } from './contactFieldFormat.js'; //for the list of orders these are used
+import { cityFormatter, stateFormatter, createMemberX } from './contactFieldFormat.js';
+import { dateFormat } from './format.js'; //for the list of orders these are used
 
 var OrderListFull = function OrderListFull(props) {
   if (props.orders.length <= 0) {
@@ -32,39 +33,39 @@ var OrderList = function OrderList(props) {
   var ordersFormatted = [];
 
   for (var i = 0; i < orders.length; i++) {
+    var isEven = i % 2 == 0;
     ordersFormatted.push(vNode(OrderListItem, {
-      order: orders[i]
+      order: orders[i],
+      even: isEven
     }));
   }
 
   return vNode("div", {
-    "class": "flex-parent contact-list",
-    id: "contactList3"
+    "class": "flex-parent order-list"
   }, vNode("ul", {
     "class": "table-row should-be-invisible table-headers"
   }, vNode("li", {
     "class": "table-cell"
-  }, "Order Number"), vNode("li", {
+  }, "Order #:"), vNode("li", {
     "class": "table-cell"
-  }, "Account"), vNode("li", {
+  }, "Date Ordered:"), vNode("li", {
     "class": "table-cell"
-  }, "Activated Date"), vNode("li", {
+  }, "Account:"), vNode("li", {
     "class": "table-cell"
-  }, "Effective Date"), vNode("li", {
+  }, "Ship To:"), vNode("li", {
     "class": "table-cell"
-  }, "Ship To Contact"), vNode("li", {
+  }, "Bill To:"), vNode("li", {
     "class": "table-cell"
-  }, "Bill To Contact"), vNode("li", {
-    "class": "table-cell"
-  }, "Total Amount")), ordersFormatted);
+  }, "Total:")), ordersFormatted);
 };
 
 var OrderListItem = function OrderListItem(props) {
   var order = props.order;
-  var activeDate = "NA";
+  var isEven = props.even;
+  var date = "NA";
 
-  if (order.ActivatedDate) {
-    activeDate = order.ActivatedDate.split('T')[0];
+  if (order.EffectiveDate) {
+    date = dateFormat(order.EffectiveDate);
   }
 
   var accountName = "NA";
@@ -87,45 +88,41 @@ var OrderListItem = function OrderListItem(props) {
 
 
   return vNode("ul", {
-    "class": "table-row"
+    "class": isEven ? "table-row" : "table-row orderedItemGrey"
   }, vNode("li", {
     "class": "table-cell order-number"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Order Number: "), vNode("a", {
+  }, "Order #: "), vNode("a", {
     target: "_blank",
     href: "/orderhistory/details/" + order.Id
   }, order.OrderNumber)), vNode("li", {
+    "class": "table-cell order-effective"
+  }, vNode("span", {
+    className: "disappear-when-big"
+  }, "Date Ordered: "), date), vNode("li", {
     "class": "table-cell account-id"
   }, vNode("span", {
     className: "disappear-when-big"
   }, "Account: "), accountName), vNode("li", {
-    "class": "table-cell order-activate"
-  }, vNode("span", {
-    className: "disappear-when-big"
-  }, "Activated Date: "), activeDate), vNode("li", {
-    "class": "table-cell order-effective"
-  }, vNode("span", {
-    className: "disappear-when-big"
-  }, "Effective Date: "), order.EffectiveDate), vNode("li", {
     "class": "table-cell order-ship"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Ship To Contact: "), vNode("a", {
+  }, "Ship To: "), vNode("a", {
     target: "_blank",
     href: "/directory/members/" + order.ShipToContactId
   }, shippingName)), vNode("li", {
     "class": "table-cell order-bill"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Bill To Contact: "), vNode("a", {
+  }, "Bill To: "), vNode("a", {
     target: "_blank",
     href: "/directory/members/" + order.BillToContactId
   }, billingName)), vNode("li", {
     "class": "table-cell order-total"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Total Amount: "), "$" + order.TotalAmount));
+  }, "Total Amount: "), "$" + order.TotalAmount + ".00"));
 }; //When you click on an order, these are used:
 //need to seperate these based on the id they were clicked on
 
@@ -133,36 +130,42 @@ var OrderListItem = function OrderListItem(props) {
 var DetailedListFull = function DetailedListFull(props) {
   //let detail = props.orderItems;
   var order = props.orderItems[0];
-  var activeDate = "NA";
+  var activeDate = "No Date"; //this isnt getting used
 
   if (order.Order.ActivatedDate) {
     activeDate = order.Order.ActivatedDate.split('T')[0];
   }
 
-  var accountName = "NA";
+  var accountName = "No Account Connected";
 
   if (order.Order.Account) {
     accountName = order.Order.Account.Name;
   }
 
-  var shippingName = "NA";
+  var shippingName = "No Shipping Name";
 
   if (order.Order.ShipToContact) {
     shippingName = order.Order.ShipToContact.Name;
   }
 
-  var billingName = "NA";
+  var billingName = "No Billing Name";
 
   if (order.Order.BillToContact) {
     billingName = order.Order.BillToContact.Name;
   } //Order.EffectiveDate, activeDate, accountName, billingName, shippingName, Order.TotalAmount, Order.OrderNumber
 
 
-  return vNode("div", null, vNode("div", null, vNode("h1", {
+  return vNode("div", null, vNode("div", null, vNode("div", {
+    "class": "title-container"
+  }, vNode("div", {
+    "class": "title-left"
+  }, vNode("h1", {
     "class": "margin-maker-2"
   }, "Order ", order.Order.OrderNumber), vNode("h2", {
     "class": "margin-maker"
-  }, accountName), vNode("h3", null, shippingName), vNode("h4", null, "Active Date: ", activeDate), vNode("h4", null, "Effective Date: ", order.Order.EffectiveDate), vNode("h4", null, "Total Amount: ", order.Order.TotalAmount), vNode("br", null), vNode(OrderItemsList, {
+  }, accountName), vNode("h3", null, shippingName)), vNode("div", {
+    "class": "title-right"
+  }, vNode("h3", null, "Date: ", dateFormat(order.Order.EffectiveDate)), vNode("h3", null, "Total Amount: ", "$" + order.Order.TotalAmount + ".00"))), vNode(OrderItemsList, {
     orderItems: props.orderItems
   })));
 };
@@ -172,8 +175,10 @@ var OrderItemsList = function OrderItemsList(props) {
   var orderItemsFormatted = [];
 
   for (var i = 0; i < orderItems.length; i++) {
+    var isEven = i % 2 == 0;
     orderItemsFormatted.push(vNode(OrderItemListItem, {
-      orderItem: orderItems[i]
+      orderItem: orderItems[i],
+      even: isEven
     }));
   }
 
@@ -201,6 +206,7 @@ var OrderItemsList = function OrderItemsList(props) {
 
 var OrderItemListItem = function OrderItemListItem(props) {
   var orderItem = props.orderItem;
+  var isEven = props.even;
   var productName = "NA";
   var productLinkId = "";
 
@@ -238,7 +244,7 @@ var OrderItemListItem = function OrderItemListItem(props) {
 
 
   return vNode("ul", {
-    "class": "table-row"
+    "class": isEven ? "table-row orderedItemGrey" : "table-row"
   }, vNode("li", {
     "class": "table-cell order-bill"
   }, vNode("span", {
@@ -258,7 +264,7 @@ var OrderItemListItem = function OrderItemListItem(props) {
     "class": "table-cell account-id"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Expiration Date: "), orderItem.ExpirationDate__c), vNode("li", {
+  }, "Expiration Date: "), dateFormat(orderItem.ExpirationDate__c)), vNode("li", {
     "class": "table-cell order-total"
   }, vNode("span", {
     className: "disappear-when-big"
@@ -272,3 +278,69 @@ var OrderItemListItem = function OrderItemListItem(props) {
     className: "disappear-when-big"
   }, "Total Amount: "), "$" + totalPrice));
 };
+/*
+const OrderItemsListTemp = function(props) {
+
+    let orderItems = props.orderItems;
+  
+    let orderItemsFormatted = [];
+    for (let i = 0; i < orderItems.length; i++) {
+        orderItemsFormatted.push(<OrderItemListItemTemp orderItem={orderItems[i]} />);
+    }
+  
+    return (
+      <div class="flex-parent">
+        {orderItemsFormatted}
+      </div>
+    )
+};
+
+
+const OrderItemListItemTemp = function(props) {
+
+    let orderItem = props.orderItem;
+
+    let productName = "NA";
+    let productLinkId = "";
+    if (orderItem.Product2) {
+        productName = orderItem.Product2.Name;
+        if (orderItem.Product2.ClickpdxCatalog__IsOption__c) {
+            productLinkId = orderItem.Product2.ClickpdxCatalog__ParentProduct__c;
+        }
+        else {
+            productLinkId = orderItem.Product2Id;
+        }
+    }
+    let accountName = "NA";
+    if (orderItem.Contact__r) {
+        if (orderItem.Contact__r.Account) {
+            accountName = orderItem.Contact__r.Account.Name;
+        }
+    }
+    let fullName = "NA";
+    if (orderItem.FirstName__c && orderItem.LastName__c) {
+        fullName = orderItem.FirstName__c + " " + orderItem.LastName__c;
+    }
+    let totalPrice = "NA";
+    if (orderItem.TotalPrice) {
+        totalPrice = orderItem.TotalPrice;
+    }
+    else if (orderItem.UnitPrice && orderItem.Quantity) {
+        totalPrice = orderItem.UnitPrice + orderItem.Quantity;
+    }
+    
+    //will need something to check if product doesnt exist dont put it as link
+    return (
+      <div class="orderedItem">
+        <span className="disappear-when-big">Product: </span><a target="_blank" href={"https://ocdpartial-ocdla.cs198.force.com/OcdlaProduct?id="+productLinkId}>{productName}</a>
+        <span className="disappear-when-big">Account: </span>{accountName}
+        <span className="disappear-when-big">Name: </span>{fullName}
+        <span className="disappear-when-big">Expiration Date: </span>{dateFormat(orderItem.ExpirationDate__c)}
+        <span className="disappear-when-big">Unit Price: </span>{"$"+orderItem.UnitPrice}
+        <span className="disappear-when-big">Quantity: </span>{orderItem.Quantity}
+        <span className="disappear-when-big">Total Amount: </span>{"$"+totalPrice}
+      </div>
+    )
+
+};
+*/

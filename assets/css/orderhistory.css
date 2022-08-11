@@ -1,44 +1,54 @@
 
+
+#switchButtonIcon {
+	display: none; /*no clue why this is showing up, its left over from eventsPage, I just need to find it in the code, might be an events js thing*/
+}
+
 .order-history-main {
 	align-content: center;
 }
 
+.order-list {
+	width: 75%;
+}
 
-.record-list {
+.table {
+	width: 100%;
+}
+
+.title-container {
+	padding: 10px;
+	/*
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-radius: 5px;
+	border-color: rgba(47,54,76,1.0);
+	border-width: 7px; */
+	border-style: solid;
+	border-radius: 5px;
+	border-color: rgba(47,54,76,1.0);
+	border-width: 2px;
+	margin-bottom: 15px;
 	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-evenly;
+    flex-direction: row;
 }
 
-.record-list-item {
-  width: 30%;
-  padding: 2%;
-  cursor:pointer;
-  transition-property: background-color;
-  transition-duration: 0.3s;
-  transition-delay: 0.1s;
-  border-radius: 10px;
+.title-left {
+	flex: 2;
 }
 
-.record-list-item:hover {
-	background-color:rgba(0,0,0,0.2);
+.title-right {
+	align-self: right;
+	flex: 2;
 }
 
-
-
-.event-list-item {
-	margin-bottom: 25px;
+.orderedItem {
+	padding: 10px;
+	margin-bottom: 15px;
 }
 
-.hiddenButton {
-	display: none;
-}
-.switchButton {
-	width: 10px;
-}
-.fas {
-	font-size: 1.75rem;
-	color: rgb(124,124,124);
+.orderedItemGrey {
+	background-color: rgb(242, 242, 242);
 }
 
 .disappear-when-big {
@@ -71,13 +81,6 @@
 		content:"" !important;
 	}
 
-    li.table-cell {
-        padding-right: 20px;
-    }
-
-    ul.table-headers li.table-cell {
-        font-weight: bold;
-    }
 
 	
 }
