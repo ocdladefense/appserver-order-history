@@ -57,17 +57,17 @@ const OrderList = function(props) {
     }
     
     return (
-      <div class="flex-parent order-list">
-        <ul class="table-row should-be-invisible table-headers">
-            <li class="table-cell">Order #:</li>
-            <li class="table-cell">Date Ordered:</li>
-            <li class="table-cell">Account:</li>
-            <li class="table-cell">Ship To:</li>
-            <li class="table-cell">Bill To:</li>
-            <li class="table-cell">Total:</li>
-        </ul>
+      <table class="flex-parent order-list">
+        <tr class="tr-table-row should-be-invisible table-headers">
+            <td class="td-table-cell">Order #:</td>
+            <td class="td-table-cell">Date Ordered:</td>
+            <td class="td-table-cell">Account:</td>
+            <td class="td-table-cell">Ship To:</td>
+            <td class="td-table-cell">Bill To:</td>
+            <td class="td-table-cell">Total:</td>
+        </tr>
         {ordersFormatted}
-      </div>
+      </table>
     )
 };
 
@@ -94,14 +94,14 @@ const OrderListItem = function(props) {
 
     //TODO: Links are clickable even if they are NA
     return (
-      <ul class={isEven ? "table-row" : "table-row orderedItemGrey"}>
-        <li class="table-cell order-number"><span className="disappear-when-big">Order #: </span><a target="_blank" href={"/orderhistory/details/"+order.Id}>{order.OrderNumber}</a></li>
-        <li class="table-cell order-effective"><span className="disappear-when-big">Date Ordered: </span>{date}</li>
-        <li class="table-cell account-id"><span className="disappear-when-big">Account: </span>{accountName}</li>
-        <li class="table-cell order-ship"><span className="disappear-when-big">Ship To: </span><a target="_blank" href={"/directory/members/"+order.ShipToContactId}>{shippingName}</a></li>
-        <li class="table-cell order-bill"><span className="disappear-when-big">Bill To: </span><a target="_blank" href={"/directory/members/"+order.BillToContactId}>{billingName}</a></li>
-        <li class="table-cell order-total"><span className="disappear-when-big">Total Amount: </span>{"$"+order.TotalAmount+".00"}</li>
-      </ul>
+      <tr class={isEven ? "tr-table-row" : "tr-table-row orderedItemGrey"}>
+        <td class="td-table-cell order-number"><span className="disappear-when-big">Order #: </span><a target="_blank" href={"/orderhistory/details/"+order.Id}>{order.OrderNumber}</a></td>
+        <td class="td-table-cell order-effective"><span className="disappear-when-big">Date Ordered: </span>{date}</td>
+        <td class="td-table-cell account-id"><span className="disappear-when-big">Account: </span>{accountName}</td>
+        <td class="td-table-cell order-ship"><span className="disappear-when-big">Ship To: </span><a target="_blank" href={"/directory/members/"+order.ShipToContactId}>{shippingName}</a></td>
+        <td class="td-table-cell order-bill"><span className="disappear-when-big">Bill To: </span><a target="_blank" href={"/directory/members/"+order.BillToContactId}>{billingName}</a></td>
+        <td class="td-table-cell order-total"><span className="disappear-when-big">Total Amount: </span>{"$"+order.TotalAmount+".00"}</td>
+      </tr>
     )
 
 };
@@ -172,18 +172,18 @@ const OrderItemsList = function(props) {
     }
   
     return (
-      <div class="flex-parent contact-list" id="contactList3">
-        <ul class="table-row should-be-invisible table-headers">
-          <li class="table-cell">Product</li>
-          <li class="table-cell">Account</li>
-          <li class="table-cell">Name</li>
-          <li class="table-cell">Expiration Date</li> 
-          <li class="table-cell">Unit Price</li>
-          <li class="table-cell">Quantity</li>
-          <li class="table-cell">Total Amount</li>
-        </ul>
+      <table class="flex-parent contact-list" id="contactList3">
+        <tr class="tr-table-row should-be-invisible table-headers">
+          <td class="td-table-cell">Product</td>
+          <td class="td-table-cell">Account</td>
+          <td class="td-table-cell">Name</td>
+          <td class="td-table-cell">Expiration Date</td> 
+          <td class="td-table-cell">Unit Price</td>
+          <td class="td-table-cell">Quantity</td>
+          <td class="td-table-cell">Total Amount</td>
+        </tr>
         {orderItemsFormatted}
-      </div>
+      </table>
     )
 };
 
@@ -224,15 +224,15 @@ const OrderItemListItem = function(props) {
     
     //will need something to check if product doesnt exist dont put it as link
     return (
-      <ul class={isEven ? "table-row orderedItemGrey" : "table-row"}>
-        <li class="table-cell order-bill"><span className="disappear-when-big">Product: </span><a target="_blank" href={"https://ocdpartial-ocdla.cs198.force.com/OcdlaProduct?id="+productLinkId}>{productName}</a></li>
-        <li class="table-cell account-id"><span className="disappear-when-big">Account: </span>{accountName}</li>
-        <li class="table-cell account-id"><span className="disappear-when-big">Name: </span>{fullName}</li>
-        <li class="table-cell account-id"><span className="disappear-when-big">Expiration Date: </span>{dateFormat(orderItem.ExpirationDate__c)}</li>
-        <li class="table-cell order-total"><span className="disappear-when-big">Unit Price: </span>{"$"+orderItem.UnitPrice}</li>
-        <li class="table-cell account-id"><span className="disappear-when-big">Quantity: </span>{orderItem.Quantity}</li>
-        <li class="table-cell order-total"><span className="disappear-when-big">Total Amount: </span>{"$"+totalPrice}</li>
-      </ul>
+      <tr class={isEven ? "tr-table-row" : "tr-table-row orderedItemGrey"}>
+        <td class="td-table-cell order-bill"><span className="disappear-when-big">Product: </span><a target="_blank" href={"https://ocdpartial-ocdla.cs198.force.com/OcdlaProduct?id="+productLinkId}>{productName}</a></td>
+        <td class="td-table-cell account-id"><span className="disappear-when-big">Account: </span>{accountName}</td>
+        <td class="td-table-cell account-id"><span className="disappear-when-big">Name: </span>{fullName}</td>
+        <td class="td-table-cell account-id"><span className="disappear-when-big">Expiration Date: </span>{dateFormat(orderItem.ExpirationDate__c)}</td>
+        <td class="td-table-cell order-total"><span className="disappear-when-big">Unit Price: </span>{"$"+orderItem.UnitPrice}</td>
+        <td class="td-table-cell account-id"><span className="disappear-when-big">Quantity: </span>{orderItem.Quantity}</td>
+        <td class="td-table-cell order-total"><span className="disappear-when-big">Total Amount: </span>{"$"+totalPrice}</td>
+      </tr>
     )
 
 };

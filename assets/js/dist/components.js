@@ -40,22 +40,22 @@ var OrderList = function OrderList(props) {
     }));
   }
 
-  return vNode("div", {
+  return vNode("table", {
     "class": "flex-parent order-list"
-  }, vNode("ul", {
-    "class": "table-row should-be-invisible table-headers"
-  }, vNode("li", {
-    "class": "table-cell"
-  }, "Order #:"), vNode("li", {
-    "class": "table-cell"
-  }, "Date Ordered:"), vNode("li", {
-    "class": "table-cell"
-  }, "Account:"), vNode("li", {
-    "class": "table-cell"
-  }, "Ship To:"), vNode("li", {
-    "class": "table-cell"
-  }, "Bill To:"), vNode("li", {
-    "class": "table-cell"
+  }, vNode("tr", {
+    "class": "tr-table-row should-be-invisible table-headers"
+  }, vNode("td", {
+    "class": "td-table-cell"
+  }, "Order #:"), vNode("td", {
+    "class": "td-table-cell"
+  }, "Date Ordered:"), vNode("td", {
+    "class": "td-table-cell"
+  }, "Account:"), vNode("td", {
+    "class": "td-table-cell"
+  }, "Ship To:"), vNode("td", {
+    "class": "td-table-cell"
+  }, "Bill To:"), vNode("td", {
+    "class": "td-table-cell"
   }, "Total:")), ordersFormatted);
 };
 
@@ -87,39 +87,39 @@ var OrderListItem = function OrderListItem(props) {
   } //TODO: Links are clickable even if they are NA
 
 
-  return vNode("ul", {
-    "class": isEven ? "table-row" : "table-row orderedItemGrey"
-  }, vNode("li", {
-    "class": "table-cell order-number"
+  return vNode("tr", {
+    "class": isEven ? "tr-table-row" : "tr-table-row orderedItemGrey"
+  }, vNode("td", {
+    "class": "td-table-cell order-number"
   }, vNode("span", {
     className: "disappear-when-big"
   }, "Order #: "), vNode("a", {
     target: "_blank",
     href: "/orderhistory/details/" + order.Id
-  }, order.OrderNumber)), vNode("li", {
-    "class": "table-cell order-effective"
+  }, order.OrderNumber)), vNode("td", {
+    "class": "td-table-cell order-effective"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Date Ordered: "), date), vNode("li", {
-    "class": "table-cell account-id"
+  }, "Date Ordered: "), date), vNode("td", {
+    "class": "td-table-cell account-id"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Account: "), accountName), vNode("li", {
-    "class": "table-cell order-ship"
+  }, "Account: "), accountName), vNode("td", {
+    "class": "td-table-cell order-ship"
   }, vNode("span", {
     className: "disappear-when-big"
   }, "Ship To: "), vNode("a", {
     target: "_blank",
     href: "/directory/members/" + order.ShipToContactId
-  }, shippingName)), vNode("li", {
-    "class": "table-cell order-bill"
+  }, shippingName)), vNode("td", {
+    "class": "td-table-cell order-bill"
   }, vNode("span", {
     className: "disappear-when-big"
   }, "Bill To: "), vNode("a", {
     target: "_blank",
     href: "/directory/members/" + order.BillToContactId
-  }, billingName)), vNode("li", {
-    "class": "table-cell order-total"
+  }, billingName)), vNode("td", {
+    "class": "td-table-cell order-total"
   }, vNode("span", {
     className: "disappear-when-big"
   }, "Total Amount: "), "$" + order.TotalAmount + ".00"));
@@ -182,25 +182,25 @@ var OrderItemsList = function OrderItemsList(props) {
     }));
   }
 
-  return vNode("div", {
+  return vNode("table", {
     "class": "flex-parent contact-list",
     id: "contactList3"
-  }, vNode("ul", {
-    "class": "table-row should-be-invisible table-headers"
-  }, vNode("li", {
-    "class": "table-cell"
-  }, "Product"), vNode("li", {
-    "class": "table-cell"
-  }, "Account"), vNode("li", {
-    "class": "table-cell"
-  }, "Name"), vNode("li", {
-    "class": "table-cell"
-  }, "Expiration Date"), vNode("li", {
-    "class": "table-cell"
-  }, "Unit Price"), vNode("li", {
-    "class": "table-cell"
-  }, "Quantity"), vNode("li", {
-    "class": "table-cell"
+  }, vNode("tr", {
+    "class": "tr-table-row should-be-invisible table-headers"
+  }, vNode("td", {
+    "class": "td-table-cell"
+  }, "Product"), vNode("td", {
+    "class": "td-table-cell"
+  }, "Account"), vNode("td", {
+    "class": "td-table-cell"
+  }, "Name"), vNode("td", {
+    "class": "td-table-cell"
+  }, "Expiration Date"), vNode("td", {
+    "class": "td-table-cell"
+  }, "Unit Price"), vNode("td", {
+    "class": "td-table-cell"
+  }, "Quantity"), vNode("td", {
+    "class": "td-table-cell"
   }, "Total Amount")), orderItemsFormatted);
 };
 
@@ -243,37 +243,37 @@ var OrderItemListItem = function OrderItemListItem(props) {
   } //will need something to check if product doesnt exist dont put it as link
 
 
-  return vNode("ul", {
-    "class": isEven ? "table-row orderedItemGrey" : "table-row"
-  }, vNode("li", {
-    "class": "table-cell order-bill"
+  return vNode("tr", {
+    "class": isEven ? "tr-table-row" : "tr-table-row orderedItemGrey"
+  }, vNode("td", {
+    "class": "td-table-cell order-bill"
   }, vNode("span", {
     className: "disappear-when-big"
   }, "Product: "), vNode("a", {
     target: "_blank",
     href: "https://ocdpartial-ocdla.cs198.force.com/OcdlaProduct?id=" + productLinkId
-  }, productName)), vNode("li", {
-    "class": "table-cell account-id"
+  }, productName)), vNode("td", {
+    "class": "td-table-cell account-id"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Account: "), accountName), vNode("li", {
-    "class": "table-cell account-id"
+  }, "Account: "), accountName), vNode("td", {
+    "class": "td-table-cell account-id"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Name: "), fullName), vNode("li", {
-    "class": "table-cell account-id"
+  }, "Name: "), fullName), vNode("td", {
+    "class": "td-table-cell account-id"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Expiration Date: "), dateFormat(orderItem.ExpirationDate__c)), vNode("li", {
-    "class": "table-cell order-total"
+  }, "Expiration Date: "), dateFormat(orderItem.ExpirationDate__c)), vNode("td", {
+    "class": "td-table-cell order-total"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Unit Price: "), "$" + orderItem.UnitPrice), vNode("li", {
-    "class": "table-cell account-id"
+  }, "Unit Price: "), "$" + orderItem.UnitPrice), vNode("td", {
+    "class": "td-table-cell account-id"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Quantity: "), orderItem.Quantity), vNode("li", {
-    "class": "table-cell order-total"
+  }, "Quantity: "), orderItem.Quantity), vNode("td", {
+    "class": "td-table-cell order-total"
   }, vNode("span", {
     className: "disappear-when-big"
   }, "Total Amount: "), "$" + totalPrice));
