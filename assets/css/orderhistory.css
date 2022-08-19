@@ -76,6 +76,10 @@
 	font-weight: bold;
 }
 
+.return-link {
+	margin-bottom: 5px;
+}
+
 @media screen and (max-width: 800px) {
 
 	.tr-table-row {

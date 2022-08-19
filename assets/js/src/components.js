@@ -16,9 +16,7 @@ import { vNode } from '../../../node_modules/@ocdladefense/view/view.js';
 
 import { CACHE, HISTORY } from '../../../node_modules/@ocdladefense/view/cache.js';
 
-import { cityFormatter, stateFormatter, createMemberX } from './contactFieldFormat.js';
-
-import { dateFormat } from './format.js';
+import { dateFormat, moneyFormat } from './format.js';
 
 
 
@@ -62,8 +60,8 @@ const OrderList = function(props) {
             <td class="td-table-cell">Order #:</td>
             <td class="td-table-cell">Date Ordered:</td>
             <td class="td-table-cell">Account:</td>
-            <td class="td-table-cell">Ship To:</td>
             <td class="td-table-cell">Bill To:</td>
+            <td class="td-table-cell">Ship To:</td>
             <td class="td-table-cell">Total:</td>
         </tr>
         {ordersFormatted}
@@ -84,12 +82,16 @@ const OrderListItem = function(props) {
         accountName = order.Account.Name;
     }
     let shippingName = "NA";
+    let orderShippingNode = <p>NA</p>
     if (order.ShipToContact) {
         shippingName = order.ShipToContact.Name;
+        orderShippingNode = <a target="_blank" href={"/directory/members/"+order.ShipToContactId}>{shippingName}</a>
     }
     let billingName = "NA";
+    let orderBillingNode = <p>NA</p>
     if (order.BillToContact) {
         billingName = order.BillToContact.Name;
+        orderBillingNode = <a target="_blank" href={"/directory/members/"+order.BillToContactId}>{billingName}</a>
     }
 
     //TODO: Links are clickable even if they are NA
@@ -98,9 +100,9 @@ const OrderListItem = function(props) {
         <td class="td-table-cell order-number"><span className="disappear-when-big">Order #: </span><a target="_blank" href={"/orderhistory/details/"+order.Id}>{order.OrderNumber}</a></td>
         <td class="td-table-cell order-effective"><span className="disappear-when-big">Date Ordered: </span>{date}</td>
         <td class="td-table-cell account-id"><span className="disappear-when-big">Account: </span>{accountName}</td>
-        <td class="td-table-cell order-ship"><span className="disappear-when-big">Ship To: </span><a target="_blank" href={"/directory/members/"+order.ShipToContactId}>{shippingName}</a></td>
-        <td class="td-table-cell order-bill"><span className="disappear-when-big">Bill To: </span><a target="_blank" href={"/directory/members/"+order.BillToContactId}>{billingName}</a></td>
-        <td class="td-table-cell order-total"><span className="disappear-when-big">Total Amount: </span>{"$"+order.TotalAmount+".00"}</td>
+        <td class="td-table-cell order-bill"><span className="disappear-when-big">Bill To: </span>{orderBillingNode}</td>
+        <td class="td-table-cell order-ship"><span className="disappear-when-big">Ship To: </span>{orderShippingNode}</td>
+        <td class="td-table-cell order-total"><span className="disappear-when-big">Total Amount: </span>{moneyFormat(order.TotalAmount)}</td>
       </tr>
     )
 
@@ -138,6 +140,7 @@ const DetailedListFull = function(props){
     return(
         <div>
             <div>
+                <a class="return-link" href="/orderhistory/list">Return to Order List</a>
                 <div class="title-container">
                     <div class="title-left">
                         <h1 class="margin-maker-2">
@@ -150,7 +153,7 @@ const DetailedListFull = function(props){
                     </div>
                     <div class="title-right">
                         <h3>Date: {dateFormat(order.Order.EffectiveDate)}</h3>
-                        <h3>Total Amount: {"$" + order.Order.TotalAmount + ".00"}</h3>
+                        <h3>Total Amount: {moneyFormat(order.Order.TotalAmount)}</h3>
                     </div>
                 </div>
                 <OrderItemsList orderItems={props.orderItems} />
@@ -175,7 +178,6 @@ const OrderItemsList = function(props) {
       <table class="flex-parent contact-list" id="contactList3">
         <tr class="tr-table-row should-be-invisible table-headers">
           <td class="td-table-cell">Product</td>
-          <td class="td-table-cell">Account</td>
           <td class="td-table-cell">Name</td>
           <td class="td-table-cell">Expiration Date</td> 
           <td class="td-table-cell">Unit Price</td>
@@ -203,12 +205,6 @@ const OrderItemListItem = function(props) {
             productLinkId = orderItem.Product2Id;
         }
     }
-    let accountName = "NA";
-    if (orderItem.Contact__r) {
-        if (orderItem.Contact__r.Account) {
-            accountName = orderItem.Contact__r.Account.Name;
-        }
-    }
     let fullName = "NA";
     if (orderItem.FirstName__c && orderItem.LastName__c) {
         fullName = orderItem.FirstName__c + " " + orderItem.LastName__c;
@@ -226,12 +222,11 @@ const OrderItemListItem = function(props) {
     return (
       <tr class={isEven ? "tr-table-row" : "tr-table-row orderedItemGrey"}>
         <td class="td-table-cell order-bill"><span className="disappear-when-big">Product: </span><a target="_blank" href={"https://ocdpartial-ocdla.cs198.force.com/OcdlaProduct?id="+productLinkId}>{productName}</a></td>
-        <td class="td-table-cell account-id"><span className="disappear-when-big">Account: </span>{accountName}</td>
         <td class="td-table-cell account-id"><span className="disappear-when-big">Name: </span>{fullName}</td>
         <td class="td-table-cell account-id"><span className="disappear-when-big">Expiration Date: </span>{dateFormat(orderItem.ExpirationDate__c)}</td>
-        <td class="td-table-cell order-total"><span className="disappear-when-big">Unit Price: </span>{"$"+orderItem.UnitPrice}</td>
+        <td class="td-table-cell order-total"><span className="disappear-when-big">Unit Price: </span>{moneyFormat(orderItem.UnitPrice)}</td>
         <td class="td-table-cell account-id"><span className="disappear-when-big">Quantity: </span>{orderItem.Quantity}</td>
-        <td class="td-table-cell order-total"><span className="disappear-when-big">Total Amount: </span>{"$"+totalPrice}</td>
+        <td class="td-table-cell order-total"><span className="disappear-when-big">Total Amount: </span>{moneyFormat(totalPrice)}</td>
       </tr>
     )
 

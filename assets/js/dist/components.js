@@ -8,8 +8,7 @@ This is our list of components to be used in the app.
 export { OrderListFull, OrderList, DetailedListFull };
 import { vNode } from '../../../node_modules/@ocdladefense/view/view.js';
 import { CACHE, HISTORY } from '../../../node_modules/@ocdladefense/view/cache.js';
-import { cityFormatter, stateFormatter, createMemberX } from './contactFieldFormat.js';
-import { dateFormat } from './format.js'; //for the list of orders these are used
+import { dateFormat, moneyFormat } from './format.js'; //for the list of orders these are used
 
 var OrderListFull = function OrderListFull(props) {
   if (props.orders.length <= 0) {
@@ -52,9 +51,9 @@ var OrderList = function OrderList(props) {
     "class": "td-table-cell"
   }, "Account:"), vNode("td", {
     "class": "td-table-cell"
-  }, "Ship To:"), vNode("td", {
-    "class": "td-table-cell"
   }, "Bill To:"), vNode("td", {
+    "class": "td-table-cell"
+  }, "Ship To:"), vNode("td", {
     "class": "td-table-cell"
   }, "Total:")), ordersFormatted);
 };
@@ -75,15 +74,25 @@ var OrderListItem = function OrderListItem(props) {
   }
 
   var shippingName = "NA";
+  var orderShippingNode = vNode("p", null, "NA");
 
   if (order.ShipToContact) {
     shippingName = order.ShipToContact.Name;
+    orderShippingNode = vNode("a", {
+      target: "_blank",
+      href: "/directory/members/" + order.ShipToContactId
+    }, shippingName);
   }
 
   var billingName = "NA";
+  var orderBillingNode = vNode("p", null, "NA");
 
   if (order.BillToContact) {
     billingName = order.BillToContact.Name;
+    orderBillingNode = vNode("a", {
+      target: "_blank",
+      href: "/directory/members/" + order.BillToContactId
+    }, billingName);
   } //TODO: Links are clickable even if they are NA
 
 
@@ -105,24 +114,18 @@ var OrderListItem = function OrderListItem(props) {
   }, vNode("span", {
     className: "disappear-when-big"
   }, "Account: "), accountName), vNode("td", {
-    "class": "td-table-cell order-ship"
-  }, vNode("span", {
-    className: "disappear-when-big"
-  }, "Ship To: "), vNode("a", {
-    target: "_blank",
-    href: "/directory/members/" + order.ShipToContactId
-  }, shippingName)), vNode("td", {
     "class": "td-table-cell order-bill"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Bill To: "), vNode("a", {
-    target: "_blank",
-    href: "/directory/members/" + order.BillToContactId
-  }, billingName)), vNode("td", {
+  }, "Bill To: "), orderBillingNode), vNode("td", {
+    "class": "td-table-cell order-ship"
+  }, vNode("span", {
+    className: "disappear-when-big"
+  }, "Ship To: "), orderShippingNode), vNode("td", {
     "class": "td-table-cell order-total"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Total Amount: "), "$" + order.TotalAmount + ".00"));
+  }, "Total Amount: "), moneyFormat(order.TotalAmount)));
 }; //When you click on an order, these are used:
 //need to seperate these based on the id they were clicked on
 
@@ -155,7 +158,10 @@ var DetailedListFull = function DetailedListFull(props) {
   } //Order.EffectiveDate, activeDate, accountName, billingName, shippingName, Order.TotalAmount, Order.OrderNumber
 
 
-  return vNode("div", null, vNode("div", null, vNode("div", {
+  return vNode("div", null, vNode("div", null, vNode("a", {
+    target: "_blank",
+    href: "/orderhistory/list"
+  }, "Return to Order List"), vNode("div", {
     "class": "title-container"
   }, vNode("div", {
     "class": "title-left"
@@ -165,7 +171,7 @@ var DetailedListFull = function DetailedListFull(props) {
     "class": "margin-maker"
   }, accountName), vNode("h3", null, shippingName)), vNode("div", {
     "class": "title-right"
-  }, vNode("h3", null, "Date: ", dateFormat(order.Order.EffectiveDate)), vNode("h3", null, "Total Amount: ", "$" + order.Order.TotalAmount + ".00"))), vNode(OrderItemsList, {
+  }, vNode("h3", null, "Date: ", dateFormat(order.Order.EffectiveDate)), vNode("h3", null, "Total Amount: ", moneyFormat(order.Order.TotalAmount)))), vNode(OrderItemsList, {
     orderItems: props.orderItems
   })));
 };
@@ -191,8 +197,6 @@ var OrderItemsList = function OrderItemsList(props) {
     "class": "td-table-cell"
   }, "Product"), vNode("td", {
     "class": "td-table-cell"
-  }, "Account"), vNode("td", {
-    "class": "td-table-cell"
   }, "Name"), vNode("td", {
     "class": "td-table-cell"
   }, "Expiration Date"), vNode("td", {
@@ -217,14 +221,6 @@ var OrderItemListItem = function OrderItemListItem(props) {
       productLinkId = orderItem.Product2.ClickpdxCatalog__ParentProduct__c;
     } else {
       productLinkId = orderItem.Product2Id;
-    }
-  }
-
-  var accountName = "NA";
-
-  if (orderItem.Contact__r) {
-    if (orderItem.Contact__r.Account) {
-      accountName = orderItem.Contact__r.Account.Name;
     }
   }
 
@@ -256,10 +252,6 @@ var OrderItemListItem = function OrderItemListItem(props) {
     "class": "td-table-cell account-id"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Account: "), accountName), vNode("td", {
-    "class": "td-table-cell account-id"
-  }, vNode("span", {
-    className: "disappear-when-big"
   }, "Name: "), fullName), vNode("td", {
     "class": "td-table-cell account-id"
   }, vNode("span", {
@@ -268,7 +260,7 @@ var OrderItemListItem = function OrderItemListItem(props) {
     "class": "td-table-cell order-total"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Unit Price: "), "$" + orderItem.UnitPrice), vNode("td", {
+  }, "Unit Price: "), moneyFormat(orderItem.UnitPrice)), vNode("td", {
     "class": "td-table-cell account-id"
   }, vNode("span", {
     className: "disappear-when-big"
@@ -276,7 +268,7 @@ var OrderItemListItem = function OrderItemListItem(props) {
     "class": "td-table-cell order-total"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Total Amount: "), "$" + totalPrice));
+  }, "Total Amount: "), moneyFormat(totalPrice)));
 };
 /*
 const OrderItemsListTemp = function(props) {

@@ -1,4 +1,4 @@
-export { dateFormat };
+export { dateFormat, moneyFormat };
 
 
 function dateFormat(date) {
@@ -11,7 +11,12 @@ function dateFormat(date) {
     else {
         //2022-06-03 format, yyyy, mm, dd (add if statement at some point)
         let day = date.substring(8);
-        if (day.substring(1) == 1) {
+        console.log(day);
+        if (day.substring(0,1) == 1) {
+            console.log("d");
+            day = day + "th, ";
+        }
+        else if (day.substring(1) == 1) {
             day = day + "st, ";
         }
         else if (day.substring(1) == 2) {
@@ -23,7 +28,7 @@ function dateFormat(date) {
         else {
             day = day + "th, ";
         }
-        if (day.substring(0) == 0) {
+        if (day.substring(0,1) == 0) {
             day = day.substring(1);
         }
         let month = date.substring(5,7);
@@ -33,4 +38,15 @@ function dateFormat(date) {
         returnValue = month + day + year;
     }
     return returnValue;
-  }
+}
+
+function moneyFormat(moneyString) {
+
+    moneyString = "$" + moneyString;
+    if (!moneyString.includes(".")) {
+        moneyString = moneyString + ".00"
+    }
+    
+
+    return moneyString;
+}
