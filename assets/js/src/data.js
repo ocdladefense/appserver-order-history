@@ -1,30 +1,20 @@
-export { getEvents, getEventDetails, getRegistrants, getCountRegistrants };
+export { getOrderItems, getOrderItemDetails };
 
 
 
-function getEvents() {
-    return fetch("/example/list/json")
+function getOrderItems() {
+    return fetch("/orderhistory/list/json")
     .then(resp => resp.json())
     .then(data => {return data;});
 }
 
-function getEventDetails(queryId) {
-    return fetch("/example/details/" + queryId)
+function getOrderItemDetails(queryId) {
+    //8010a00000GBItsAAH
+    return fetch("/orderhistory/details/json/" + queryId)
     .then(resp => resp.json())
     .then(data => {return data;});
 }
 
-function getRegistrants(queryId) {
-    return fetch("/events/eventcontactlistjson/" + queryId)
-    .then(resp => resp.json())
-    .then(data => {return data;});
-}
-
-function getCountRegistrants() {
-    return fetch("/events/eventcontactcountjson")
-    .then(resp => resp.json())
-    .then(data => {return data;});
-}
 
 
 

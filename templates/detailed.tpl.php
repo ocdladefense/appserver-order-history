@@ -16,5 +16,5 @@
 
 
 
-
-<script type="module" src="<?php print module_path(); ?>/assets/js/dist/app.js"></script>
+<script>const orderId = "<?php print $orderId; ?>"; </script>
+<script type="module" src="<?php print module_path(); ?>/assets/js/dist/detailed.js"></script>

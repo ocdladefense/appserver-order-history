@@ -1,0 +1,132 @@
+
+
+#switchButtonIcon {
+	display: none; /*no clue why this is showing up, its left over from eventsPage, I just need to find it in the code, might be an events js thing*/
+}
+
+.order-history-main {
+	align-content: center;
+}
+
+
+.title-container {
+	padding: 10px;
+	/*
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-radius: 5px;
+	border-color: rgba(47,54,76,1.0);
+	border-width: 7px; */
+	border-style: solid;
+	border-radius: 5px;
+	border-color: rgba(47,54,76,1.0);
+	border-width: 2px;
+	margin-bottom: 15px;
+	display: flex;
+    flex-direction: row;
+}
+
+.title-left {
+	flex: 2;
+}
+
+.title-right {
+	align-self: right;
+	flex: 2;
+}
+
+.orderedItem {
+	padding: 10px;
+	margin-bottom: 15px;
+}
+
+.orderedItemGrey {
+	background-color: rgb(242, 242, 242);
+}
+
+.disappear-when-big {
+	display: none;
+}
+
+
+.order-list {
+	margin-top: 10px;
+	width: 100%;
+	display:table;
+}
+
+.contact-list {
+	margin-top: 10px;
+	width: 100%;
+	display:table;
+}
+
+.tr-table-row {
+	display:table-row;
+}
+
+.td-table-cell {
+	display:table-cell;
+	padding-top:3px;
+	padding-bottom:3px;
+	border-bottom: 1px solid #ccc;
+}
+
+.table-header {
+	font-weight: bold;
+}
+
+.return-link {
+	margin-bottom: 5px;
+}
+
+@media screen and (max-width: 800px) {
+
+	.tr-table-row {
+		margin: 5px;
+		display: block;
+		padding: 5px;
+	}
+	.td-table-cell {
+		list-style: none;
+		display: block;
+		border-bottom: 0px solid #ddd;
+	}
+	.order-list {
+		display: block;
+	}
+
+	.contact-list {
+		display: block;
+	}
+	
+
+	.should-be-invisible {
+        display: none;
+    }
+
+	.disappear-when-big {
+		display: inline;
+	}
+}
+
+
+
+
+@media screen and (min-width: 800px) {
+
+	.marginMaker {
+		margin-bottom: 5px;
+	}
+	.marginMaker2 {
+		margin-left: 25px;
+		margin-bottom: 5px;
+	}
+
+	li::before {
+		content:"" !important;
+	}
+
+
+	
+}
