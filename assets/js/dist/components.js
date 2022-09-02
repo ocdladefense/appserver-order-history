@@ -159,19 +159,19 @@ var DetailedListFull = function DetailedListFull(props) {
 
 
   return vNode("div", null, vNode("div", null, vNode("a", {
-    target: "_blank",
+    "class": "return-link",
     href: "/orderhistory/list"
   }, "Return to Order List"), vNode("div", {
     "class": "title-container"
   }, vNode("div", {
     "class": "title-left"
-  }, vNode("h1", {
+  }, vNode("h2", {
     "class": "margin-maker-2"
-  }, "Order ", order.Order.OrderNumber), vNode("h2", {
+  }, "Order #", order.Order.OrderNumber), vNode("h2", {
     "class": "margin-maker"
-  }, accountName), vNode("h3", null, shippingName)), vNode("div", {
+  }, accountName), vNode("h2", null, "Date: ", dateFormat(order.Order.EffectiveDate))), vNode("div", {
     "class": "title-right"
-  }, vNode("h3", null, "Date: ", dateFormat(order.Order.EffectiveDate)), vNode("h3", null, "Total Amount: ", moneyFormat(order.Order.TotalAmount)))), vNode(OrderItemsList, {
+  }, vNode("h2", null, "Total Amount: ", moneyFormat(order.Order.TotalAmount)), vNode("h2", null, "Billing Name: ", billingName), vNode("h2", null, "Shipping Name: ", shippingName))), vNode(OrderItemsList, {
     orderItems: props.orderItems
   })));
 };
@@ -215,13 +215,29 @@ var OrderItemListItem = function OrderItemListItem(props) {
   var productLinkId = "";
 
   if (orderItem.Product2) {
+    //OrderItem.Product2.IsActive
     productName = orderItem.Product2.Name;
 
-    if (orderItem.Product2.ClickpdxCatalog__IsOption__c) {
-      productLinkId = orderItem.Product2.ClickpdxCatalog__ParentProduct__c;
+    if (orderItem.Product2.IsActive) {
+      if (orderItem.Product2.ClickpdxCatalog__IsOption__c) {
+        var productLinkUrl = "https://ocdpartial-ocdla.cs198.force.com/OcdlaProduct?id=" + orderItem.Product2.ClickpdxCatalog__ParentProduct__c;
+        productLinkId = vNode("a", {
+          target: "_blank",
+          href: productLinkUrl
+        }, productName);
+      } else {
+        var _productLinkUrl = "https://ocdpartial-ocdla.cs198.force.com/OcdlaProduct?id=" + orderItem.Product2Id;
+
+        productLinkId = vNode("a", {
+          target: "_blank",
+          href: _productLinkUrl
+        }, productName);
+      }
     } else {
-      productLinkId = orderItem.Product2Id;
+      productLinkId = vNode("div", null, productName);
     }
+  } else {
+    productLinkId = vNode("div", null, productName);
   }
 
   var fullName = "NA";
@@ -234,8 +250,6 @@ var OrderItemListItem = function OrderItemListItem(props) {
 
   if (orderItem.TotalPrice) {
     totalPrice = orderItem.TotalPrice;
-  } else if (orderItem.UnitPrice && orderItem.Quantity) {
-    totalPrice = orderItem.UnitPrice + orderItem.Quantity;
   } //will need something to check if product doesnt exist dont put it as link
 
 
@@ -245,10 +259,7 @@ var OrderItemListItem = function OrderItemListItem(props) {
     "class": "td-table-cell order-bill"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Product: "), vNode("a", {
-    target: "_blank",
-    href: "https://ocdpartial-ocdla.cs198.force.com/OcdlaProduct?id=" + productLinkId
-  }, productName)), vNode("td", {
+  }, "Product: "), productLinkId), vNode("td", {
     "class": "td-table-cell account-id"
   }, vNode("span", {
     className: "disappear-when-big"
@@ -264,7 +275,7 @@ var OrderItemListItem = function OrderItemListItem(props) {
     "class": "td-table-cell account-id"
   }, vNode("span", {
     className: "disappear-when-big"
-  }, "Quantity: "), orderItem.Quantity), vNode("td", {
+  }, "Quantity: "), orderItem.Quantity.toString()), vNode("td", {
     "class": "td-table-cell order-total"
   }, vNode("span", {
     className: "disappear-when-big"

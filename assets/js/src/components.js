@@ -143,17 +143,19 @@ const DetailedListFull = function(props){
                 <a class="return-link" href="/orderhistory/list">Return to Order List</a>
                 <div class="title-container">
                     <div class="title-left">
-                        <h1 class="margin-maker-2">
-                            Order {order.Order.OrderNumber}
-                        </h1>
+                        <h2 class="margin-maker-2">
+                            Order #{order.Order.OrderNumber}
+                        </h2>
                         <h2 class="margin-maker">
                             {accountName}
                         </h2>
-                        <h3>{shippingName}</h3>
+                        <h2>Date: {dateFormat(order.Order.EffectiveDate)}</h2>
+                        
                     </div>
                     <div class="title-right">
-                        <h3>Date: {dateFormat(order.Order.EffectiveDate)}</h3>
-                        <h3>Total Amount: {moneyFormat(order.Order.TotalAmount)}</h3>
+                        <h2>Total Amount: {moneyFormat(order.Order.TotalAmount)}</h2>
+                        <h2>Billing Name: {billingName}</h2>
+                        <h2>Shipping Name: {shippingName}</h2>
                     </div>
                 </div>
                 <OrderItemsList orderItems={props.orderItems} />
@@ -197,13 +199,24 @@ const OrderItemListItem = function(props) {
     let productName = "NA";
     let productLinkId = "";
     if (orderItem.Product2) {
+        //OrderItem.Product2.IsActive
         productName = orderItem.Product2.Name;
-        if (orderItem.Product2.ClickpdxCatalog__IsOption__c) {
-            productLinkId = orderItem.Product2.ClickpdxCatalog__ParentProduct__c;
+        if (orderItem.Product2.IsActive) {
+            if (orderItem.Product2.ClickpdxCatalog__IsOption__c) {
+                let productLinkUrl = "https://ocdpartial-ocdla.cs198.force.com/OcdlaProduct?id=" + orderItem.Product2.ClickpdxCatalog__ParentProduct__c;
+                productLinkId = <a target="_blank" href={productLinkUrl}>{productName}</a>
+            }
+            else {
+                let productLinkUrl = "https://ocdpartial-ocdla.cs198.force.com/OcdlaProduct?id=" + orderItem.Product2Id;
+                productLinkId = <a target="_blank" href={productLinkUrl}>{productName}</a>
+            }
         }
         else {
-            productLinkId = orderItem.Product2Id;
+            productLinkId = <div>{productName}</div>;
         }
+    }
+    else {
+        productLinkId = <div>{productName}</div>;
     }
     let fullName = "NA";
     if (orderItem.FirstName__c && orderItem.LastName__c) {
@@ -213,19 +226,16 @@ const OrderItemListItem = function(props) {
     if (orderItem.TotalPrice) {
         totalPrice = orderItem.TotalPrice;
     }
-    else if (orderItem.UnitPrice && orderItem.Quantity) {
-        totalPrice = orderItem.UnitPrice + orderItem.Quantity;
-    }
     
     
     //will need something to check if product doesnt exist dont put it as link
     return (
       <tr class={isEven ? "tr-table-row" : "tr-table-row orderedItemGrey"}>
-        <td class="td-table-cell order-bill"><span className="disappear-when-big">Product: </span><a target="_blank" href={"https://ocdpartial-ocdla.cs198.force.com/OcdlaProduct?id="+productLinkId}>{productName}</a></td>
+        <td class="td-table-cell order-bill"><span className="disappear-when-big">Product: </span>{productLinkId}</td>
         <td class="td-table-cell account-id"><span className="disappear-when-big">Name: </span>{fullName}</td>
         <td class="td-table-cell account-id"><span className="disappear-when-big">Expiration Date: </span>{dateFormat(orderItem.ExpirationDate__c)}</td>
         <td class="td-table-cell order-total"><span className="disappear-when-big">Unit Price: </span>{moneyFormat(orderItem.UnitPrice)}</td>
-        <td class="td-table-cell account-id"><span className="disappear-when-big">Quantity: </span>{orderItem.Quantity}</td>
+        <td class="td-table-cell account-id"><span className="disappear-when-big">Quantity: </span>{orderItem.Quantity.toString()}</td>
         <td class="td-table-cell order-total"><span className="disappear-when-big">Total Amount: </span>{moneyFormat(totalPrice)}</td>
       </tr>
     )

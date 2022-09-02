@@ -55,7 +55,7 @@ class OrderHistoryModule extends Module {
 		
 		$api = $this->loadForceApi();
 
-		$results = $api->query("SELECT OrderItem.Contact__c, OrderItem.Product2Id, OrderItem.Product2.ClickpdxCatalog__IsOption__c, OrderItem.Product2.ClickpdxCatalog__ParentProduct__c, OrderItem.Product2.Name, Contact__r.AccountId, Contact__r.Account.Name, Contact__r.Name, OrderItem.FirstName__c, OrderItem.LastName__c, OrderItem.ExpirationDate__c, OrderItem.OrderId, OrderItem.UnitPrice, OrderItem.Quantity, OrderItem.TotalPrice, Order.EffectiveDate, Order.ActivatedDate, Order.Account.Name, Order.BillToContact.Name, Order.ShipToContact.Name, Order.TotalAmount, Order.OrderNumber FROM OrderItem WHERE OrderId = '$id' ORDER BY ExpirationDate__c DESC");
+		$results = $api->query("SELECT OrderItem.Contact__c, OrderItem.Product2Id, OrderItem.Product2.IsActive, OrderItem.Product2.ClickpdxCatalog__IsOption__c, OrderItem.Product2.ClickpdxCatalog__ParentProduct__c, OrderItem.Product2.Name, Contact__r.AccountId, Contact__r.Account.Name, Contact__r.Name, OrderItem.FirstName__c, OrderItem.LastName__c, OrderItem.ExpirationDate__c, OrderItem.OrderId, OrderItem.UnitPrice, OrderItem.Quantity, OrderItem.TotalPrice, Order.EffectiveDate, Order.ActivatedDate, Order.Account.Name, Order.BillToContact.Name, Order.ShipToContact.Name, Order.TotalAmount, Order.OrderNumber FROM OrderItem WHERE OrderId = '$id' ORDER BY ExpirationDate__c DESC");
 
 		$records = $results->getRecords();
 

@@ -22,11 +22,12 @@ function init() {
 
 
     Promise.all([theList]).then(function(data) {
-        CACHE.set("Orders", data[0]); //not being used? maybe?
+        CACHE.set("Orders", data[0]);
         
         let initTree = <OrderListFull orders={data[0]} />;
-        
-        HISTORY.clear();
+        //let view = View.createRoot("#order-history-main");
+        //view.render(<OrderListFull orders={data[0]} />);
+        HISTORY.clear(); //moved to View
         HISTORY.set(0, initTree);
         render(getMainContainer(), initTree);
     });

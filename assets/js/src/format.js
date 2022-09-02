@@ -11,9 +11,7 @@ function dateFormat(date) {
     else {
         //2022-06-03 format, yyyy, mm, dd (add if statement at some point)
         let day = date.substring(8);
-        console.log(day);
         if (day.substring(0,1) == 1) {
-            console.log("d");
             day = day + "th, ";
         }
         else if (day.substring(1) == 1) {
