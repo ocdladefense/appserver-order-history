@@ -9,7 +9,9 @@ This is our list of components to be used in the app.
 
 
 
-export { OrderListFull, OrderList, DetailedListFull };
+export { OrderListFull, OrderList, DetailedListFull, getOrderItems, getOrderItemDetails };
+
+
 
 
 import { vNode } from '../../../node_modules/@ocdladefense/view/view.js';
@@ -22,54 +24,9 @@ import { dateFormat, moneyFormat } from './format.js';
 
 //for the list of orders these are used
 
-const OrderListFull = function(props) {
 
-    if (props.orders.length <= 0) {
-        return(<div><h2>No Orders Found for this Account</h2></div>);
-    }
 
-    let orders = props.orders[0];
-    let billingName = "";
-    if (orders.BillToContact) {
-        billingName = orders.BillToContact.Name;
-    }
-    
-    return(
-        <div>
-            <div>
-                <h2>Order History for {billingName}</h2>
-            </div>
-            <OrderList orders={props.orders} />
-        </div>
-    )
-};
-
-const OrderList = function(props) {
-
-    let orders = props.orders;
-  
-    let ordersFormatted = [];
-    for (let i = 0; i < orders.length; i++) {
-        let isEven = i % 2 == 0;
-        ordersFormatted.push(<OrderListItem order={orders[i]} even={isEven} />);
-    }
-    
-    return (
-      <table class="flex-parent order-list">
-        <tr class="tr-table-row should-be-invisible table-headers">
-            <td class="td-table-cell">Order #:</td>
-            <td class="td-table-cell">Date Ordered:</td>
-            <td class="td-table-cell">Account:</td>
-            <td class="td-table-cell">Bill To:</td>
-            <td class="td-table-cell">Ship To:</td>
-            <td class="td-table-cell">Total:</td>
-        </tr>
-        {ordersFormatted}
-      </table>
-    )
-};
-
-const OrderListItem = function(props) {
+const Order = function(props) {
     let order = props.order;
     let isEven = props.even;
 
@@ -94,10 +51,35 @@ const OrderListItem = function(props) {
         orderBillingNode = <a target="_blank" href={"/directory/members/"+order.BillToContactId}>{billingName}</a>
     }
 
-    //TODO: Links are clickable even if they are NA
+    let fn = function(e) {
+        e.recordId = e.currentTarget.dataset && e.currentTarget.dataset.recordId;
+        e.frameworkDetail = e.currentTarget.dataset;
+        e.action = e.currentTarget.dataset.action;
+        console.log(e.recordId);
+    };
+
+    function loadOrder(e) {
+        console.log(e.target);
+        let theList = getOrderItemDetails(e.target.dataset.orderId);
+        Promise.all([theList]).then(function(data) {
+            
+            
+            let initTree = <DetailedListFull orderItems={data[0]} />;
+    
+            view.update(initTree);
+        });
+    
+        //return initTree;
+    }
+    
+
+    //TODO: Links are clickable even if they are NA href={"/orderhistory/details/"+order.Id}  target="_blank"
     return (
-      <tr class={isEven ? "tr-table-row" : "tr-table-row orderedItemGrey"}>
-        <td class="td-table-cell order-number"><span className="disappear-when-big">Order #: </span><a target="_blank" href={"/orderhistory/details/"+order.Id}>{order.OrderNumber}</a></td>
+      <tr class={isEven ? "order tr-table-row" : "order tr-table-row orderedItemGrey"} data-record-id={order.Id}>
+        <td class="td-table-cell order-number">
+            <span className="disappear-when-big">Order #: </span>
+            <a class="testEventClass" href="#" data-action="loadOrder" data-record-id={order.Id} onclick={loadOrder}>{order.OrderNumber}</a>
+        </td>
         <td class="td-table-cell order-effective"><span className="disappear-when-big">Date Ordered: </span>{date}</td>
         <td class="td-table-cell account-id"><span className="disappear-when-big">Account: </span>{accountName}</td>
         <td class="td-table-cell order-bill"><span className="disappear-when-big">Bill To: </span>{orderBillingNode}</td>
@@ -115,7 +97,7 @@ const OrderListItem = function(props) {
 
 
 
-const DetailedListFull = function(props){
+const OrderDetails = function(props){
     //let detail = props.orderItems;
     let order = props.orderItems[0];
 
@@ -166,7 +148,7 @@ const DetailedListFull = function(props){
     )
 }
 
-const OrderItemsList = function(props) {
+const OrderItemList = function(props) {
 
     let orderItems = props.orderItems;
   
@@ -191,7 +173,7 @@ const OrderItemsList = function(props) {
     )
 };
 
-const OrderItemListItem = function(props) {
+const OrderItem = function(props) {
 
     let orderItem = props.orderItem;
     let isEven = props.even;
@@ -241,6 +223,24 @@ const OrderItemListItem = function(props) {
     )
 
 };
+
+
+
+//data.js
+function getOrderItems() {
+    return fetch("/orderhistory/list/json")
+    .then(resp => resp.json())
+    .then(data => {return data;});
+}
+
+function getOrderItemDetails(queryId) {
+    //8010a00000GBItsAAH
+    return fetch("/orderhistory/details/json/" + queryId)
+    .then(resp => resp.json())
+    .then(data => {return data;});
+}
+
+
 /*
 const OrderItemsListTemp = function(props) {
 

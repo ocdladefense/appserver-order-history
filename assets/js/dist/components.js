@@ -5,7 +5,7 @@
 This is our list of components to be used in the app.
 
 **/
-export { OrderListFull, OrderList, DetailedListFull };
+export { OrderListFull, OrderList, DetailedListFull, getOrderItems, getOrderItemDetails };
 import { vNode } from '../../../node_modules/@ocdladefense/view/view.js';
 import { CACHE, HISTORY } from '../../../node_modules/@ocdladefense/view/cache.js';
 import { dateFormat, moneyFormat } from './format.js'; //for the list of orders these are used
@@ -22,7 +22,7 @@ var OrderListFull = function OrderListFull(props) {
     billingName = orders.BillToContact.Name;
   }
 
-  return vNode("div", null, vNode("div", null, vNode("h2", null, "Order History for ", billingName)), vNode(OrderList, {
+  return vNode("div", null, vNode("h2", null, "Order History for ", billingName), vNode(OrderList, {
     orders: props.orders
   }));
 };
@@ -93,18 +93,40 @@ var OrderListItem = function OrderListItem(props) {
       target: "_blank",
       href: "/directory/members/" + order.BillToContactId
     }, billingName);
-  } //TODO: Links are clickable even if they are NA
+  }
+
+  var fn = function fn(e) {
+    e.recordId = e.currentTarget.dataset && e.currentTarget.dataset.recordId;
+    e.frameworkDetail = e.currentTarget.dataset;
+    e.action = e.currentTarget.dataset.action;
+    console.log(e.recordId);
+  };
+
+  function loadOrder(e) {
+    console.log(e.target);
+    var theList = getOrderItemDetails(e.dataset.orderId);
+    Promise.all([theList]).then(function (data) {
+      var initTree = vNode(DetailedListFull, {
+        orderItems: data[0]
+      });
+      view.update(initTree);
+    }); //return initTree;
+  } //TODO: Links are clickable even if they are NA href={"/orderhistory/details/"+order.Id}  target="_blank"
 
 
   return vNode("tr", {
-    "class": isEven ? "tr-table-row" : "tr-table-row orderedItemGrey"
+    "class": isEven ? "order tr-table-row" : "order tr-table-row orderedItemGrey",
+    "data-record-id": order.Id
   }, vNode("td", {
     "class": "td-table-cell order-number"
   }, vNode("span", {
     className: "disappear-when-big"
   }, "Order #: "), vNode("a", {
-    target: "_blank",
-    href: "/orderhistory/details/" + order.Id
+    "class": "testEventClass",
+    href: "#",
+    "data-action": "loadOrder",
+    "data-record-id": order.Id,
+    onclick: loadOrder
   }, order.OrderNumber)), vNode("td", {
     "class": "td-table-cell order-effective"
   }, vNode("span", {
@@ -280,7 +302,25 @@ var OrderItemListItem = function OrderItemListItem(props) {
   }, vNode("span", {
     className: "disappear-when-big"
   }, "Total Amount: "), moneyFormat(totalPrice)));
-};
+}; //data.js
+
+
+function getOrderItems() {
+  return fetch("/orderhistory/list/json").then(function (resp) {
+    return resp.json();
+  }).then(function (data) {
+    return data;
+  });
+}
+
+function getOrderItemDetails(queryId) {
+  //8010a00000GBItsAAH
+  return fetch("/orderhistory/details/json/" + queryId).then(function (resp) {
+    return resp.json();
+  }).then(function (data) {
+    return data;
+  });
+}
 /*
 const OrderItemsListTemp = function(props) {
 

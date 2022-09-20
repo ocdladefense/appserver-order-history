@@ -1,26 +1,15 @@
 /** @jsx vNode */
-import { vNode, addEvent, getMainContainer, changeMainContainer, myAppEventHandler, render } from '../../../node_modules/@ocdladefense/view/view.js';
-import { CACHE, HISTORY } from '../../../node_modules/@ocdladefense/view/cache.js';
-import { getOrderItems, getOrderItemDetails } from './data.js';
-import { OrderListFull } from './components.js';
-import { switchToList, switchToDetails, doSearch } from './events.js';
+import { vNode, View } from '/node_modules/@ocdladefense/view/view.js'; //point to root js file
+
+import { OrderHistory } from './OrderHistory.js';
 
 function init() {
   // Probably change to document.querySelector().
-  changeMainContainer("order-history-main");
-  var theList = getOrderItems();
-  Promise.all([theList]).then(function (data) {
-    CACHE.set("Orders", data[0]); //not being used? maybe?
+  //changeMainContainer("order-history-main");
+  var view = View.createRoot("#order-history-main");
+  view.render(vNode(OrderHistory, null)); //view.addEvent("loadOrder", loadOrder);
+} //document.addEventListener("click", myAppEventHandler);
 
-    var initTree = vNode(OrderListFull, {
-      orders: data[0]
-    });
-    HISTORY.clear();
-    HISTORY.set(0, initTree);
-    render(getMainContainer(), initTree);
-  });
-  document.addEventListener("click", myAppEventHandler);
-}
 /*
 addEvent("search", function() {
     let stringEntered = document.getElementById("searchBar").value;
